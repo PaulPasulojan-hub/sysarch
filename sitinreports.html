@@ -336,6 +336,99 @@
             color: #ffc107;
         }
 
+        @media print {
+            /* Hide ALL UI chrome */
+            .navbar,
+            .controls,
+            .page-title,
+            #unifiedSitInModal {
+                display: none !important;
+            }
+
+            /* Show the print header */
+            #printHeader {
+                display: block !important;
+            }
+
+            /* Remove browser header/footer (date, URL, page number) */
+            @page {
+                margin: 1.5cm;
+                size: A4 landscape;
+            }
+
+            body {
+                background: white !important;
+                color: black !important;
+                font-family: 'Plus Jakarta Sans', sans-serif;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .page-wrapper {
+                margin: 0 !important;
+                padding: 0 !important;
+                max-width: 100% !important;
+                margin-top: 0 !important;
+            }
+
+            .table-card {
+                box-shadow: none !important;
+                border-radius: 8px !important;
+                padding: 20px !important;
+                border: 1px solid #ccc !important;
+            }
+
+            table {
+                box-shadow: none !important;
+                border: none !important;
+                width: 100% !important;
+                border-collapse: collapse !important;
+            }
+
+            th {
+                background: white !important;
+                color: #333 !important;
+                font-size: 12px !important;
+                font-weight: 600 !important;
+                border-bottom: 1px solid #999 !important;
+                border-top: 1px solid #999 !important;
+                padding: 10px 8px !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            td {
+                background: white !important;
+                color: #000 !important;
+                border-bottom: 1px solid #ddd !important;
+                font-size: 11px !important;
+                padding: 8px !important;
+            }
+
+            tr:hover {
+                background: none !important;
+            }
+
+            #printHeader {
+                text-align: center;
+                margin-bottom: 20px;
+            }
+
+            #printHeader p {
+                font-size: 12px !important;
+                color: #555 !important;
+                margin-bottom: 4px !important;
+            }
+
+            #printHeader h1 {
+                font-size: 24px !important;
+                font-weight: 700 !important;
+                color: #000 !important;
+                margin: 0 0 16px 0 !important;
+                font-family: 'Sora', sans-serif;
+            }
+        }
+
         /* ══════════════════════════════════════════════
            DARK / LIGHT MODE — CSS VARIABLES
         ══════════════════════════════════════════════ */
@@ -651,6 +744,13 @@
         <div class="page-title"><i class="fa fa-chart-bar"></i> Generate Reports</div>
 
         <div class="table-card">
+
+            <div id="printHeader" style="display:none; text-align:center; margin-bottom: 20px;">
+                <p style="font-size: 12px; color: #555; margin: 0 0 4px 0;">University of Cebu – Main Campus System</p>
+                <h1 style="font-size: 22px; font-weight: 700; margin: 0; font-family: 'Sora', sans-serif; color: #000;">
+                    College Of Computer Studies Reports
+                </h1>
+            </div>
             
             <div class="controls">
                 
@@ -883,7 +983,7 @@
 
             body.innerHTML = data.map(r => `
                 <tr>
-                    <td><b style="font-family: 'Sora', sans-serif;">${r.idNumber}</b></td>
+                    <td>${r.idNumber}</td>
                     <td>${r.firstName} ${r.lastName}</td>
                     <td>${r.purpose}</td>
                     <td>${r.lab}</td>
