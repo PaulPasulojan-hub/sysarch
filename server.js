@@ -83,6 +83,19 @@ db.serialize(() => {
         idNumber TEXT UNIQUE,
         manualPoints INTEGER DEFAULT 0
     )`);
+
+    db.run(`CREATE TABLE IF NOT EXISTS software (
+        id          INTEGER PRIMARY KEY AUTOINCREMENT,
+        name        TEXT NOT NULL,
+        category    TEXT,
+        description TEXT,
+        labs        TEXT,
+        icon        TEXT,
+        color       TEXT,
+        bg          TEXT,
+        fileName    TEXT,
+        dateAdded   TEXT
+    )`);
 });
 
 // --- REGISTER & LOGIN ---
@@ -671,6 +684,67 @@ app.post("/admin/reset-all-points", (req, res) => {
     db.run(`UPDATE student_points SET manualPoints = 0`, (err) => {
         if (err) return res.status(500).json({ error: err.message });
         res.json({ message: "All manual points reset." });
+    });
+});
+
+// --- GET software count per lab --- ✅ MUST BE FIRST
+app.get("/software/counts", (req, res) => {
+    db.all(`SELECT labs FROM software`, [], (err, rows) => {
+        if (err) return res.status(500).json({ error: err.message });
+        const counts = { '524': 0, '525': 0, '526': 0, '527': 0, '528': 0 };
+        rows.forEach(row => {
+            try {
+                const labs = JSON.parse(row.labs || '[]');
+                labs.forEach(l => { if (counts[l] !== undefined) counts[l]++; });
+            } catch (e) {}
+        });
+        res.json(counts);
+    });
+});
+
+// --- GET all software ---
+// --- GET all software ---
+app.get("/software", (req, res) => {
+    db.all(`SELECT * FROM software ORDER BY id DESC`, [], (err, rows) => {
+        if (err) {
+            console.error("Software GET error:", err.message); // ADD THIS
+            return res.status(500).json({ error: err.message });
+        }
+        const parsed = rows.map(r => ({ ...r, labs: JSON.parse(r.labs || '[]') }));
+        res.json(parsed);
+    });
+});
+
+// --- ADD software ---
+// --- ADD software ---
+app.post("/software", (req, res) => {
+    const { name, category, description, labs, icon, color, bg, fileName } = req.body;
+    
+    console.log("POST /software received:", req.body); // ADD THIS LINE
+    
+    if (!name) return res.status(400).json({ message: "Name is required." });
+    const dateAdded = new Date().toLocaleDateString('en-CA');
+    const labsJson  = JSON.stringify(labs || []);
+    db.run(
+        `INSERT INTO software (name, category, description, labs, icon, color, bg, fileName, dateAdded)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [name, category || '', description || '', labsJson, icon || 'fa-cube', color || '#4e73df', bg || '#4e73df22', fileName || '', dateAdded],
+        function (err) {
+            if (err) {
+                console.error("Software INSERT error:", err.message); // ADD THIS LINE
+                return res.status(500).json({ error: err.message });
+            }
+            res.json({ message: "Software registered!", id: this.lastID });
+        }
+    );
+});
+
+// --- DELETE software --- ✅ Parameterized route LAST
+app.delete("/software/:id", (req, res) => {
+    db.run(`DELETE FROM software WHERE id = ?`, [req.params.id], function (err) {
+        if (err) return res.status(500).json({ error: err.message });
+        if (this.changes === 0) return res.status(404).json({ message: "Not found" });
+        res.json({ message: "Software deleted." });
     });
 });
 
