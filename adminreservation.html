@@ -9,289 +9,173 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Sora:wght@400;600;700&display=swap" rel="stylesheet"> 
     <style>
+        .btn-manage-pc {
+            width: 100%;
+            background: linear-gradient(135deg, #2c3e70 0%, #4e73df 100%);
+            color: white;
+            border: none;
+            padding: 11px 10px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-weight: 600;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 13px;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            letter-spacing: 0.3px;
+            transition: all 0.2s ease;
+        }
+        .btn-manage-pc:hover { background: linear-gradient(135deg, #1e2d5a 0%, #3a5bbf 100%); }
+        .btn-manage-pc i { font-size: 13px; }
 
-        .page-title {
-            font-size: 25px;
-            font-weight: 700;
-            color: #1a1a2e;
-            margin-top: 25px;
+        /* ── Manage PC Modal ── */
+        #managePCModal .modal-content {
+            width: 680px;
+            max-width: 95vw;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+        }
+        #managePCModal .modal-body {
+            padding: 18px 20px;
+            overflow-y: auto;
+            flex: 1;
+        }
+        .pc-lab-bar {
             display: flex;
             align-items: center;
             gap: 10px;
-            width: 100%;
-            max-width: 1200px;
+            margin-bottom: 16px;
         }
- 
-        .page-title i { color: #34ad52; }
+        .pc-lab-bar select {
+            flex: 1;
+            padding: 9px 12px;
+            border: 1px solid #d1d3e2;
+            border-radius: 7px;
+            font-size: 14px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            cursor: pointer;
+        }
+        .pc-legend {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 14px;
+        }
+        .pc-legend span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+        .leg-available { background: #d4edda; color: #155724; }
+        .leg-used      { background: #cce5ff; color: #004085; }
+        .leg-broken    { background: #e2e3e5; color: #383d41; }
+        .leg-unavail   { background: #fff3cd; color: #856404; }
 
-        .modal-overlay {
+        /* PC Grid inside modal */
+        .pc-manage-grid {
+            display: grid;
+            grid-template-columns: repeat(9, 1fr);
+            gap: 7px;
+            margin-bottom: 12px;
+        }
+        .pc-btn {
+            width: 100%;
+            padding: 8px 2px;
+            font-size: 10px;
+            font-weight: 700;
+            border-radius: 5px;
+            border: 1.5px solid transparent;
+            cursor: pointer;
+            transition: all 0.15s;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            text-align: center;
+            position: relative;
+        }
+        .pc-btn:hover { transform: scale(1.1); box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+
+        .pc-btn.status-available {
+            background: #d4edda; color: #155724; border-color: #28a745;
+        }
+        .pc-btn.status-used {
+            background: #cce5ff; color: #004085; border-color: #4e73df;
+        }
+        .pc-btn.status-broken {
+            background: #e2e3e5; color: #383d41; border-color: #6c757d;
+        }
+        .pc-btn.status-unavailable {
+            background: #fff3cd; color: #856404; border-color: #ffc107;
+        }
+
+        /* Loading skeleton for PC grid */
+        .pc-btn.loading {
+            background: #f0f0f0;
+            border-color: #ddd;
+            color: transparent;
+            animation: shimmer 1.2s infinite;
+        }
+        @keyframes shimmer {
+            0%   { opacity: 0.5; }
+            50%  { opacity: 1;   }
+            100% { opacity: 0.5; }
+        }
+
+        /* PC Context Menu */
+        .pc-context-menu {
             display: none;
             position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            z-index: 500;
-            justify-content: center;
-            align-items: center;
-            backdrop-filter: blur(5px);
-            background-color: rgba(0,0,0,0.4);
-        }
-
-        .modal-content { 
-            background: #fff; 
-            border-radius: 10px; 
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4); 
-            overflow: hidden; 
-            animation: slideDown 0.3s ease-out; 
-        }
-        .modal-header { 
-            background: #2c3e70;
-            padding: 15px 20px;
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            color: white; 
-        }
-        
-        .search-wrapper { 
-            display: flex; 
-            align-items: center; 
-            background: #ffffff; 
-            border: 2px solid #e3e6f0; 
-            border-radius: 10px; 
-            transition: all 0.2s; 
-        }
-        .search-wrapper:focus-within { 
-            box-shadow: 0 0 8px rgba(44, 62, 112, 0.2); 
-        }
-        .search-wrapper input { 
-            flex: 1; border: none !important; 
-            padding: 12px; 
-            font-size: 15px; 
-            outline: none !important; 
-        }
-
-        /* --- Search Result Card (From Image) --- */
-        #searchResultsList { 
-            margin-top: 15px; 
-            display: flex; 
-            flex-direction: column; 
-            gap: 10px; 
-        }
-        .search-result-item {
-            display: flex; 
-            align-items: center; 
-            background: #f8f9fc; 
-            border-radius: 12px; 
-            padding: 12px; 
-            cursor: pointer; 
-            transition: all 0.2s;
-        }
-        .search-result-item:hover { 
-            background: #fff; 
-            transform: translateY(-2px); 
-        }
-        
-        .user-avatar {
-            width: 45px; 
-            height: 45px; 
-            background: #4e73df; 
-            color: white; 
-            border-radius: 50%;
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            font-weight: 700; 
-            margin-right: 15px;
-        }
-        .user-info-text .name { 
-            display: block; 
-            font-weight: 700; 
-            color: #2c3e70; 
-            font-size: 14px; 
-        }
-        .user-info-text .meta { 
-            font-size: 11px; 
-            color: #858796; 
-            display: flex; 
-            gap: 8px; 
-        }
-        .user-status-badges { 
-            display: flex; 
-            flex-direction: column; 
-            align-items: flex-end; 
-            flex: 1; 
-            font-size: 11px; 
-            font-weight: 800; 
-        }
-        .badge-sessions { 
-            color: #1cc88a; 
-        }
-
-        /* --- Sit-in Form Styles --- */
-        .student-profile-card { 
-            background: #f8f9fc; 
-            border-left: 5px solid #2c3e70; 
-            border-radius: 8px; 
-            padding: 20px; 
-            margin: 20px; 
-        }
-        .profile-name { 
-            display: block; 
-            font-size: 1.1rem; 
-            font-weight: 600; 
-            color: #2c3e70; 
-            margin-bottom: 10px; 
-            text-transform: uppercase; 
-        }
-        .profile-meta { 
-            display: grid; 
-            grid-template-columns: 1fr 1fr; gap: 15px; 
-        }
-        .meta-item label { 
-            display: block; 
-            font-size: 10px; 
-            text-transform: uppercase; 
-            color: #858796; 
-            font-weight: 800; 
-        }
-        .meta-item span { 
-            font-weight: 600; 
-            color: #444; 
-        }
-        .modern-select { 
-            width: 100%; 
-            padding: 12px; 
-            border: 1px solid #d1d3e2; 
-            border-radius: 8px; 
-            cursor: pointer; 
-        }
-        
-        .modal-footer { 
-            padding: 15px 20px; 
-            background: #f8f9fc; 
-            border-top: 1px solid #e3e6f0; 
-            display: flex; 
-            justify-content: flex-end; 
-            gap: 10px; 
-        }
-
-        .btn-confirm { 
-            background: #2c3e70; 
-            color: white; 
-            border: none; 
-            padding: 10px 20px; 
-            border-radius: 6px; 
-            cursor: pointer; 
-            font-weight: 600; 
-        }
-
-        .btn-cancel { 
-            background: #858796;
-            color: white; 
-            border: none; 
-            padding: 10px 20px; 
-            border-radius: 6px; 
-            cursor: pointer; 
-        }
-
-        .btn-confirm:hover {
-            background: #2c3e70;
-            transform: translateY(-1px);
-        }
-
-        .btn-cancel:hover {
-            background: #858796;
-            transform: translateY(-1px);
-        }
-
-        @keyframes slideDown {
-            from { transform: translateY(-50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        /* ── Main Layout ── */
-        .reservation-grid {
-            display: grid;
-            grid-template-columns: 350px 1fr 1fr;
-            gap: 20px;
-            padding: 20px;
-            max-width: 1400px;
-            margin: auto;
-        }
-
-        .panel {
             background: white;
+            border: 1px solid #e0e0e0;
             border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+            z-index: 9999;
             overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            height: 80vh;
+            min-width: 185px;
+            animation: menuFadeIn 0.15s ease-out;
         }
-
-        .panel-header {
+        @keyframes menuFadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to   { opacity: 1; transform: scale(1); }
+        }
+        .pc-context-menu .menu-title {
+            padding: 9px 14px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #fff;
             background: #2c3e70;
-            color: white;
-            padding: 15px;
-            text-align: center;
-            font-weight: 600;
-            font-size: 15px;
+            letter-spacing: 0.5px;
         }
-
-        .panel-body { 
-            padding: 10px; 
-            overflow-y: auto; 
-            flex-grow: 1; 
-        }
-
-        /* Computer Control */
-        .control-group { 
-            margin-bottom: 25px; 
-        }
-
-        .control-group label { 
-            display: block; 
-            text-align: center;
-            margin-top: 10px;
-            margin-bottom: 15px; 
-            font-size: 20px; 
-            font-weight: 700; 
-        }
-
-        .control-group select { 
-            width: 100%; 
-            padding: 8px; 
-            border: 1px solid #ddd; 
-            border-radius: 4px; 
-        }
-
-        .btn-filter {
-            width: 100%; 
-            background: #007bff; 
-            color: white; 
-            border: none;
-            padding: 10px; 
-            border-radius: 5px; 
-            cursor: pointer; 
-            font-weight: 600;
+        .pc-context-menu .menu-item {
+            padding: 9px 14px;
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.12s;
             font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 600;
         }
+        .pc-context-menu .menu-item:hover { background: #f0f2f8; }
+        .menu-item.opt-available { color: #155724; }
+        .menu-item.opt-used      { color: #004085; }
+        .menu-item.opt-broken    { color: #383d41; }
+        .menu-item.opt-unavail   { color: #856404; }
 
-        .btn-filter:hover { 
-            background: #0056b3;
-            transform: translateY(-1px); 
+        /* Refresh button */
+        .btn-refresh {
+            width: 100%; background: #6c757d; color: white; border: none;
+            padding: 8px; border-radius: 5px; cursor: pointer; font-size: 13px;
+            font-family: 'Plus Jakarta Sans', sans-serif; margin-top: 8px;
         }
-
-        .status-legend {
-            display: flex; 
-            gap: 10px; 
-            margin-top: 15px; 
-            justify-content: center;
-        }
-
-        .badge-avail { background: #28a745; color: white; padding: 5px 10px; border-radius: 4px; font-size: 12px; }
-        .badge-used  { background: #dc3545; color: white; padding: 5px 10px; border-radius: 4px; font-size: 12px; }
+        .btn-refresh:hover { background: #5a6268; }
 
         /* Request Cards */
         .res-card {
@@ -334,14 +218,6 @@
         }
         .empty-state i { font-size: 36px; display: block; margin-bottom: 10px; }
 
-        /* Refresh button */
-        .btn-refresh {
-            width: 100%; background: #6c757d; color: white; border: none;
-            padding: 8px; border-radius: 5px; cursor: pointer; font-size: 13px;
-            font-family: 'Plus Jakarta Sans', sans-serif; margin-top: 8px;
-        }
-        .btn-refresh:hover { background: #5a6268; }
-
         .panel-count {
             font-size: 13px; 
             opacity: 0.8; 
@@ -350,249 +226,214 @@
             padding: 1px 7px; border-radius: 10px;
         }
 
-        .theme-toggle-btn {
+        .page-title {
+            font-size: 25px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-top: 25px;
             display: flex;
             align-items: center;
-            background: rgba(255,255,255,0.12);
-            border: 1px solid rgba(255,255,255,0.22);
+            gap: 10px;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .page-title i { color: #34ad52; }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 500;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content { 
+            background: #fff; 
+            border-radius: 10px; 
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4); 
+            overflow: hidden; 
+            animation: slideDown 0.3s ease-out; 
+        }
+        .modal-header { 
+            background: #2c3e70;
+            padding: 15px 20px;
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            color: white; 
+        }
+        
+        .search-wrapper { 
+            display: flex; 
+            align-items: center; 
+            background: #ffffff; 
+            border: 2px solid #e3e6f0; 
+            border-radius: 10px; 
+            transition: all 0.2s; 
+        }
+        .search-wrapper:focus-within { box-shadow: 0 0 8px rgba(44, 62, 112, 0.2); }
+        .search-wrapper input { 
+            flex: 1; border: none !important; 
+            padding: 12px; 
+            font-size: 15px; 
+            outline: none !important; 
+        }
+
+        #searchResultsList { 
+            margin-top: 15px; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 10px; 
+        }
+        .search-result-item {
+            display: flex; 
+            align-items: center; 
+            background: #f8f9fc; 
+            border-radius: 12px; 
+            padding: 12px; 
+            cursor: pointer; 
+            transition: all 0.2s;
+        }
+        .search-result-item:hover { background: #fff; transform: translateY(-2px); }
+        
+        .user-avatar {
+            width: 45px; height: 45px; background: #4e73df; color: white; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center; font-weight: 700; margin-right: 15px;
+        }
+        .user-info-text .name { display: block; font-weight: 700; color: #2c3e70; font-size: 14px; }
+        .user-info-text .meta { font-size: 11px; color: #858796; display: flex; gap: 8px; }
+        .user-status-badges { display: flex; flex-direction: column; align-items: flex-end; flex: 1; font-size: 11px; font-weight: 800; }
+        .badge-sessions { color: #1cc88a; }
+
+        .student-profile-card { 
+            background: #f8f9fc; border-left: 5px solid #2c3e70; border-radius: 8px; padding: 20px; margin: 20px; 
+        }
+        .profile-name { display: block; font-size: 1.1rem; font-weight: 600; color: #2c3e70; margin-bottom: 10px; text-transform: uppercase; }
+        .profile-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .meta-item label { display: block; font-size: 10px; text-transform: uppercase; color: #858796; font-weight: 800; }
+        .meta-item span { font-weight: 600; color: #444; }
+        .modern-select { width: 100%; padding: 12px; border: 1px solid #d1d3e2; border-radius: 8px; cursor: pointer; }
+        
+        .modal-footer { 
+            padding: 15px 20px; background: #f8f9fc; border-top: 1px solid #e3e6f0; 
+            display: flex; justify-content: flex-end; gap: 10px; 
+        }
+        .btn-confirm { background: #2c3e70; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; }
+        .btn-cancel  { background: #858796; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; }
+        .btn-confirm:hover { background: #2c3e70; transform: translateY(-1px); }
+        .btn-cancel:hover  { background: #858796; transform: translateY(-1px); }
+
+        @keyframes slideDown {
+            from { transform: translateY(-50px); opacity: 0; }
+            to   { transform: translateY(0); opacity: 1; }
+        }
+
+        /* ── Main Layout ── */
+        .reservation-grid {
+            display: grid;
+            grid-template-columns: 350px 1fr 1fr;
+            gap: 20px;
+            padding: 20px;
+            max-width: 1400px;
+            margin: auto;
+        }
+
+        .panel {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 80vh;
+        }
+
+        .panel-header {
+            background: #2c3e70;
             color: white;
-            padding: 3px;
-            border-radius: 20px;
-            transition: background 0.25s ease, transform 0.15s ease;
+            padding: 15px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 15px;
         }
 
-        .theme-toggle-btn:hover {
-            background: rgba(255,255,255,0.22);
-            transform: translateY(-1px);
-        }
+        .panel-body { padding: 10px; overflow-y: auto; flex-grow: 1; }
 
-        [data-theme="dark"] .theme-toggle-btn {
-            background: rgba(255,193,7,0.15);
-            border-color: rgba(255,193,7,0.4);
-            color: #ffc107;
-        }
+        .control-group { margin-bottom: 25px; }
+        .control-group label { display: block; text-align: center; margin-top: 10px; margin-bottom: 15px; font-size: 20px; font-weight: 700; }
+        .control-group select { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; }
 
-        /* ══════════════════════════════════════════════
-           DARK / LIGHT MODE — CSS VARIABLES
-        ══════════════════════════════════════════════ */
+        .btn-filter {
+            width: 100%; background: #007bff; color: white; border: none;
+            padding: 10px; border-radius: 5px; cursor: pointer; font-weight: 600;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .btn-filter:hover { background: #0056b3; }
+
+        .badge-avail { background: #28a745; color: white; padding: 5px 10px; border-radius: 4px; font-size: 12px; }
+        .badge-used  { background: #dc3545; color: white; padding: 5px 10px; border-radius: 4px; font-size: 12px; }
+
+        .theme-toggle-btn {
+            display: flex; align-items: center;
+            background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.22);
+            color: white; padding: 3px; border-radius: 20px; transition: background 0.25s ease, transform 0.15s ease;
+        }
+        .theme-toggle-btn:hover { background: rgba(255,255,255,0.22); transform: translateY(-1px); }
+        [data-theme="dark"] .theme-toggle-btn { background: rgba(255,193,7,0.15); border-color: rgba(255,193,7,0.4); color: #ffc107; }
+
+        /* ══ DARK / LIGHT MODE ══ */
         :root {
-            --bg-page:        #f0f2f5;
-            --bg-card:        #ffffff;
-            --bg-card-alt:    #f8f9fc;
-            --bg-input:       #ffffff;
-            --bg-header:      #2c3e70;
-            --bg-footer:      #f8f9fc;
-            --bg-table-head:  #f0f2f5;
-            --bg-table-row:   #ffffff;
-            --bg-table-hover: #f8f9fc;
-            --text-main:      #1a1a2e;
-            --text-muted:     #858796;
-            --text-label:     #333333;
-            --text-meta:      #444444;
-            --border-color:   #e3e6f0;
-            --border-inner:   #dee2e6;
-            --shadow:         0 4px 20px rgba(0,0,0,0.08);
-            --shadow-card:    0 2px 12px rgba(0,0,0,0.07);
-            --input-border:   #d1d3e2;
-            --scrollbar-bg:   #e0e0e0;
-            --scrollbar-thumb:#b0b0b0;
+            --bg-page:#f0f2f5; --bg-card:#ffffff; --bg-card-alt:#f8f9fc; --bg-input:#ffffff;
+            --bg-header:#2c3e70; --bg-footer:#f8f9fc; --text-main:#1a1a2e; --text-muted:#858796;
+            --text-label:#333333; --border-color:#e3e6f0; --border-inner:#dee2e6;
+            --shadow-card:0 2px 12px rgba(0,0,0,0.07); --input-border:#d1d3e2;
+            --scrollbar-bg:#e0e0e0; --scrollbar-thumb:#b0b0b0;
         }
- 
         [data-theme="dark"] {
-            --bg-page:        #0f1117;
-            --bg-card:        #1a1d27;
-            --bg-card-alt:    #1e2235;
-            --bg-input:       #252839;
-            --bg-header:      #111827;
-            --bg-footer:      #161928;
-            --bg-table-head:  #1e2235;
-            --bg-table-row:   #1a1d27;
-            --bg-table-hover: #222640;
-            --text-main:      #e0e6f0;
-            --text-muted:     #8892a4;
-            --text-label:     #c8d0e0;
-            --text-meta:      #b0b8cc;
-            --border-color:   #2a2f47;
-            --border-inner:   #2e3450;
-            --shadow:         0 4px 20px rgba(0,0,0,0.4);
-            --shadow-card:    0 2px 12px rgba(0,0,0,0.35);
-            --input-border:   #3a3f5c;
-            --scrollbar-bg:   #1e2235;
-            --scrollbar-thumb:#3a3f5c;
+            --bg-page:#0f1117; --bg-card:#1a1d27; --bg-card-alt:#1e2235; --bg-input:#252839;
+            --bg-header:#111827; --bg-footer:#161928; --text-main:#e0e6f0; --text-muted:#8892a4;
+            --text-label:#c8d0e0; --border-color:#2a2f47; --border-inner:#2e3450;
+            --shadow-card:0 2px 12px rgba(0,0,0,0.35); --input-border:#3a3f5c;
+            --scrollbar-bg:#1e2235; --scrollbar-thumb:#3a3f5c;
         }
- 
-        /* ── BODY & NAVBAR ── */
-        body {
-            background: var(--bg-page) !important;
-            color: var(--text-main) !important;
-            transition: background 0.3s ease, color 0.3s ease;
-        }
-        [data-theme="dark"] .navbar {
-            background: linear-gradient(to right, #0d1117, #111827) !important;
-        }
- 
-        /* ── CARDS (shared: .card, .dash-card, .table-card, .lb-card, .rw-card, .stat-card, .chart-card, .panel) ── */
-        .card, .dash-card, .table-card, .lb-card, .rw-card,
-        .stat-card, .chart-card, .panel {
-            background: var(--bg-card);
-            border-color: var(--border-color);
-            box-shadow: var(--shadow-card);
-            transition: background 0.3s, border-color 0.3s;
-        }
-        .card-header, .lb-card-header, .rw-card-header,
-        .chart-card-header, .panel-header {
-            background: var(--bg-header) !important;
-            border-bottom: 1px solid var(--border-inner);
-        }
-        [data-theme="dark"] .card-body,
-        [data-theme="dark"] .panel-body,
-        [data-theme="dark"] .rw-card-body,
-        [data-theme="dark"] .chart-card-body {
-            background: var(--bg-card);
-            color: var(--text-main);
-        }
- 
-        /* ── PAGE WRAPPER & TITLE ── */
-        .page-wrapper { background: var(--bg-page); }
-        .page-title   { color: var(--text-main); }
- 
-        /* ── MODALS ── */
-        .modal-content {
-            background: var(--bg-card) !important;
-            border: 1px solid var(--border-color);
-        }
-        .modal-body  { background: var(--bg-card); color: var(--text-main); }
-        .modal-footer{ background: var(--bg-footer) !important; border-top: 1px solid var(--border-color); }
-        [data-theme="dark"] .modal-footer { background: var(--bg-footer) !important; }
- 
-        /* ── SEARCH WRAPPER & INPUTS ── */
-        .search-wrapper {
-            background: var(--bg-input) !important;
-            border-color: var(--border-color) !important;
-        }
-        .search-wrapper input {
-            background: transparent !important;
-            color: var(--text-main) !important;
-        }
-        .search-wrapper input::placeholder { color: var(--text-muted) !important; }
- 
-        input, select, textarea, .modern-select {
-            background: var(--bg-input) !important;
-            color: var(--text-main) !important;
-            border-color: var(--input-border) !important;
-        }
-        input::placeholder, textarea::placeholder { color: var(--text-muted) !important; }
-        input[readonly], input:disabled {
-            background: var(--bg-card-alt) !important;
-            color: var(--text-muted) !important;
-        }
-        [data-theme="dark"] .form-row label { color: var(--text-label) !important; }
-        [data-theme="dark"] .form-group label { color: var(--text-label) !important; }
-        [data-theme="dark"] .control-group label { color: var(--text-label) !important; }
- 
-        /* ── TABLES ── */
-        [data-theme="dark"] table { color: var(--text-main); border-color: var(--border-color); }
-        [data-theme="dark"] thead tr,
-        [data-theme="dark"] .lb-table thead tr { background: var(--bg-table-head) !important; color: var(--text-muted) !important; }
-        [data-theme="dark"] tbody tr { background: var(--bg-table-row); border-color: var(--border-inner); }
-        [data-theme="dark"] tbody tr:hover,
-        [data-theme="dark"] .lb-table tbody tr:hover { background: var(--bg-table-hover) !important; }
-        [data-theme="dark"] th, [data-theme="dark"] td { border-color: var(--border-inner) !important; color: var(--text-main) !important; }
- 
-        /* ── SEARCH RESULT CARDS ── */
-        .search-result-item { background: var(--bg-card-alt) !important; }
-        .search-result-item:hover { background: var(--bg-card) !important; }
-        .student-profile-card { background: var(--bg-card-alt) !important; border-left-color: #4e73df !important; }
-        [data-theme="dark"] .student-profile-card { background: var(--bg-card-alt) !important; }
-        [data-theme="dark"] .profile-name { color: #7b9cff !important; }
-        [data-theme="dark"] .user-info-text .name { color: #7b9cff !important; }
-        [data-theme="dark"] .meta-item label { color: var(--text-muted) !important; }
-        [data-theme="dark"] .meta-item span  { color: var(--text-main) !important; }
- 
-        /* ── STAT CARDS ── */
-        [data-theme="dark"] .stat-card { background: var(--bg-card) !important; border-color: var(--border-inner) !important; }
-        [data-theme="dark"] .stat-label { color: var(--text-muted) !important; }
-        [data-theme="dark"] .stat-value { color: var(--text-main) !important; }
-        [data-theme="dark"] .icon-blue  { background: #1e2f5a !important; }
-        [data-theme="dark"] .icon-amber { background: #2d2810 !important; }
-        [data-theme="dark"] .icon-green { background: #0e2a1e !important; }
- 
-        /* ── LEADERBOARD ── */
-        [data-theme="dark"] .lb-card { background: var(--bg-card) !important; border-color: var(--border-inner) !important; }
-        [data-theme="dark"] .student-name { color: var(--text-main) !important; }
-        [data-theme="dark"] .student-id   { color: var(--text-muted) !important; }
-        [data-theme="dark"] .course-chip  { background: #1e2a50 !important; color: #7b9cff !important; }
-        [data-theme="dark"] .hours-val    { color: var(--text-main) !important; }
-        [data-theme="dark"] .hours-sub    { color: var(--text-muted) !important; }
-        [data-theme="dark"] .points-val   { color: #ffc107 !important; }
-        [data-theme="dark"] .rank-1  { background: #2d2810 !important; color: #ffc107 !important; }
-        [data-theme="dark"] .rank-2  { background: #252839 !important; color: #a0aec0 !important; }
-        [data-theme="dark"] .rank-3  { background: #2a1e10 !important; color: #e0a050 !important; }
-        [data-theme="dark"] .rank-other { background: #1e2235 !important; color: #8892a4 !important; }
- 
-        /* ── RESERVATION PANELS & CARDS ── */
-        [data-theme="dark"] .panel { background: var(--bg-card) !important; border-color: var(--border-inner) !important; }
+
+        body { background: var(--bg-page) !important; color: var(--text-main) !important; transition: background 0.3s ease, color 0.3s ease; }
+        [data-theme="dark"] .navbar { background: linear-gradient(to right, #0d1117, #111827) !important; }
+        .card, .panel { background: var(--bg-card); border-color: var(--border-color); box-shadow: var(--shadow-card); }
+        .panel-header { background: var(--bg-header) !important; }
+        [data-theme="dark"] .panel-body { background: var(--bg-card); color: var(--text-main); }
+        .page-title { color: var(--text-main); }
+        .modal-content { background: var(--bg-card) !important; border: 1px solid var(--border-color); }
+        .modal-body    { background: var(--bg-card); color: var(--text-main); }
+        .modal-footer  { background: var(--bg-footer) !important; border-top: 1px solid var(--border-color); }
+        .search-wrapper { background: var(--bg-input) !important; border-color: var(--border-color) !important; }
+        .search-wrapper input { background: transparent !important; color: var(--text-main) !important; }
+        input, select, textarea, .modern-select { background: var(--bg-input) !important; color: var(--text-main) !important; border-color: var(--input-border) !important; }
         [data-theme="dark"] .res-card { background: var(--bg-card-alt) !important; border-color: var(--border-inner) !important; }
         [data-theme="dark"] .res-card p { color: var(--text-main) !important; }
         [data-theme="dark"] .res-card p b { color: #7b9cff !important; }
-        [data-theme="dark"] .control-group select { background: var(--bg-input) !important; color: var(--text-main) !important; border-color: var(--input-border) !important; }
-        [data-theme="dark"] #infoBody { color: var(--text-main) !important; }
-        [data-theme="dark"] #infoBody b { color: #7b9cff !important; }
- 
-        /* ── ADMIN DASHBOARD (admindashboard.html) ── */
-        [data-theme="dark"] .admin-container { background: var(--bg-page) !important; }
-        [data-theme="dark"] .stats-grid .stat-item h3 { color: var(--text-main) !important; }
-        [data-theme="dark"] .stats-grid .stat-item p  { color: var(--text-muted) !important; }
-        [data-theme="dark"] .announcement-item { border-color: var(--border-inner) !important; color: var(--text-main) !important; }
- 
-        /* ── SOFTWARE ── */
-        [data-theme="dark"] .software-container { background: var(--bg-page) !important; }
-        [data-theme="dark"] .dropzone { background: var(--bg-card-alt) !important; border-color: var(--input-border) !important; }
-        [data-theme="dark"] .dropzone:hover, [data-theme="dark"] .dropzone.dragover { background: #1e2a50 !important; border-color: #4e73df !important; }
-        [data-theme="dark"] .dropzone p { color: var(--text-muted) !important; }
-        [data-theme="dark"] .file-preview { background: var(--bg-card-alt) !important; border-color: var(--input-border) !important; }
- 
-        /* ── REWARDS ── */
-        [data-theme="dark"] .rw-card { background: var(--bg-card) !important; border-color: var(--border-inner) !important; }
-        [data-theme="dark"] .form-group input,
-        [data-theme="dark"] .form-group select,
-        [data-theme="dark"] .form-group textarea { background: var(--bg-input) !important; color: var(--text-main) !important; border-color: var(--input-border) !important; }
-        [data-theme="dark"] .form-group input::placeholder,
-        [data-theme="dark"] .form-group textarea::placeholder { color: var(--text-muted) !important; }
- 
-        /* ── ANALYTICS CHARTS ── */
-        [data-theme="dark"] .chart-card { background: var(--bg-card) !important; border-color: var(--border-inner) !important; }
- 
-        /* ── TABLE-PAGES (sitin, viewsitin, sitinreports, studentlist, feedback) ── */
-        [data-theme="dark"] .table-card { background: var(--bg-card) !important; border-color: var(--border-inner) !important; }
-        [data-theme="dark"] .table-controls { background: var(--bg-card) !important; border-color: var(--border-inner) !important; }
-        [data-theme="dark"] .entries-control select { background: var(--bg-input) !important; color: var(--text-main) !important; border-color: var(--input-border) !important; }
-        [data-theme="dark"] .search-control input  { background: var(--bg-input) !important; color: var(--text-main) !important; border-color: var(--input-border) !important; }
-        [data-theme="dark"] .search-box { background: var(--bg-input) !important; color: var(--text-main) !important; border-color: var(--input-border) !important; }
-        .badge-active  { background: #d4edda; color: #155724; }
-        .badge-timeout { background: #f8d7da; color: #721c24; }
-        [data-theme="dark"] .badge-active  { background: #0e2a1e !important; color: #48c78e !important; }
-        [data-theme="dark"] .badge-timeout { background: #2a0e0e !important; color: #f87171 !important; }
-        [data-theme="dark"] .no-data { color: var(--text-muted) !important; }
- 
-        /* ── SCROLLBAR ── */
+        [data-theme="dark"] .log-entry { color: var(--text-main) !important; border-bottom-color: var(--border-inner) !important; }
+        [data-theme="dark"] .log-entry b { color: #7b9cff !important; }
+        [data-theme="dark"] .panel { background: var(--bg-card) !important; border-color: var(--border-inner) !important; }
+        [data-theme="dark"] .control-group label { color: var(--text-label) !important; }
+        [data-theme="dark"] .control-group select { background: var(--bg-input) !important; color: var(--text-main) !important; }
+        [data-theme="dark"] .student-profile-card { background: var(--bg-card-alt) !important; }
+        [data-theme="dark"] .profile-name { color: #7b9cff !important; }
+        [data-theme="dark"] .meta-item label { color: var(--text-muted) !important; }
+        [data-theme="dark"] .meta-item span  { color: var(--text-main) !important; }
+        [data-theme="dark"] .search-result-item { background: var(--bg-card-alt) !important; }
+        [data-theme="dark"] .user-info-text .name { color: #7b9cff !important; }
+        [data-theme="dark"] .pc-context-menu { background: var(--bg-card) !important; border-color: var(--border-color) !important; }
+        [data-theme="dark"] .pc-context-menu .menu-item:hover { background: var(--bg-card-alt) !important; }
+        [data-theme="dark"] .page-title { color: var(--text-main) !important; }
         ::-webkit-scrollbar { width: 7px; height: 7px; }
         ::-webkit-scrollbar-track { background: var(--scrollbar-bg); border-radius: 4px; }
         ::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 4px; }
-        [data-theme="dark"] ::-webkit-scrollbar-track { background: var(--scrollbar-bg); }
-        [data-theme="dark"] ::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); }
- 
-        /* ── NOTIFICATION DROPDOWN ── */
-        [data-theme="dark"] .notif-dropdown { background: var(--bg-card) !important; border-color: var(--border-color) !important; }
-        [data-theme="dark"] .notif-list > div { background: var(--bg-card) !important; border-color: var(--border-inner) !important; color: var(--text-main) !important; }
-        [data-theme="dark"] .notif-list > div[style*="eaf3fb"] { background: var(--bg-card-alt) !important; }
- 
-        /* ── MISCELLANEOUS ── */
-        [data-theme="dark"] .page-title { color: var(--text-main) !important; }
-        [data-theme="dark"] .header-section h1 { color: var(--text-main) !important; }
-        [data-theme="dark"] .controls { background: var(--bg-card) !important; border-color: var(--border-inner) !important; }
-        [data-theme="dark"] .filter-group label { color: var(--text-label) !important; }
-        [data-theme="dark"] .filter-group select { background: var(--bg-input) !important; color: var(--text-main) !important; border-color: var(--input-border) !important; }
     </style>
 </head>
 <body>
@@ -621,28 +462,23 @@
         </ul>
     </nav>
 
+    <!-- Unified Sit-In Modal -->
     <div id="unifiedSitInModal" class="modal-overlay">
         <div class="modal-content" style="width: 450px;">
             <div class="modal-header">
                 <h3><i class="fa fa-search"></i> Find Student</h3>
                 <button onclick="closeModal('unifiedSitInModal')" style="background:none; border:none; color:white; cursor:pointer; font-size:20px;">&times;</button>
             </div>
-            
             <div class="modal-body" style="padding: 10px;">
                 <div class="search-wrapper">
                     <input type="text" id="uniIdSearch" placeholder="Enter Student ID....">
-                    <button class="btn-confirm" onclick="searchAndPopulate()">
-                        <i class="fa fa-search"></i>
-                    </button>
+                    <button class="btn-confirm" onclick="searchAndPopulate()"><i class="fa fa-search"></i></button>
                 </div>
-
                 <div id="searchResultsList"></div>
-
                 <div id="studentDetailsBox" style="display: none;">
                     <div class="student-profile-card">
                         <div id="accountInfoDisplay"></div>
                     </div>
-
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                         <div>
                             <label style="font-size: 13px; font-weight: 700; color: #4e73df;">Purpose</label>
@@ -656,25 +492,18 @@
                         <div>
                             <label style="font-size: 12px; font-weight: 700; color: #4e73df;">Lab Room</label>
                             <select id="uniLab" class="modern-select" onchange="renderUniPCGrid()">
-                                <option>Lab 524</option>
-                                <option>Lab 525</option>
-                                <option>Lab 526</option>
-                                <option>Lab 527</option>
-                                <option>Lab 528</option>
+                                <option>Lab 524</option><option>Lab 525</option>
+                                <option>Lab 526</option><option>Lab 527</option><option>Lab 528</option>
                             </select>
                         </div>
                     </div>
-                
-                <div id="uniPCSection" style="display: none; margin-top: 12px; padding: 0 5px;">
+                    <div id="uniPCSection" style="display: none; margin-top: 12px; padding: 0 5px;">
                         <label style="font-size: 13px; font-weight: 700; color: #4e73df;">Select PC</label>
                         <div id="uniPCGrid" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 6px; max-height: 180px; overflow-y: auto;"></div>
                         <input type="hidden" id="uniPCNumber" value="">
                     </div>
-
                 </div>
-
             </div>
-
             <div class="modal-footer" id="uniFooter" style="display: none;">
                 <button class="btn-cancel" onclick="closeModal('unifiedSitInModal')">Cancel</button>
                 <button class="btn-confirm" onclick="submitUnifiedSitIn()">Confirm Sit-In</button>
@@ -682,12 +511,66 @@
         </div>
     </div>
 
+    <!-- Manage PC Modal -->
+    <div id="managePCModal" class="modal-overlay">
+        <div class="modal-content" style="width: 700px; max-width: 95vw; display: flex; flex-direction: column; max-height: 90vh;">
+            <div class="modal-header">
+                <h3 style="margin:0; font-size:16px;"><i class="fa-solid fa-desktop"></i> &nbsp;Manage PC Status</h3>
+                <button onclick="closeModal('managePCModal')" style="background:none; border:none; color:white; cursor:pointer; font-size:20px;">&times;</button>
+            </div>
+            <div class="modal-body" style="padding: 18px 20px; overflow-y: auto; flex: 1;">
+                <div class="pc-lab-bar">
+                    <label style="font-weight: 700; font-size: 14px; white-space: nowrap;">Laboratory:</label>
+                    <select id="managePCLab" onchange="renderManagePCGrid()">
+                        <option value="Lab 524">Lab 524</option>
+                        <option value="Lab 525">Lab 525</option>
+                        <option value="Lab 526">Lab 526</option>
+                        <option value="Lab 527">Lab 527</option>
+                        <option value="Lab 528">Lab 528</option>
+                    </select>
+                </div>
+                <p style="font-size: 12px; color: #858796; margin-bottom: 12px;">
+                    <i class="fa fa-info-circle"></i> Click any PC to change its status. Changes are saved to the database instantly.
+                </p>
+                <div class="pc-legend">
+                    <span class="leg-available"><i class="fa fa-circle" style="font-size:8px;"></i> Available</span>
+                    <span class="leg-used"     ><i class="fa fa-circle" style="font-size:8px;"></i> In Use</span>
+                    <span class="leg-broken"   ><i class="fa fa-circle" style="font-size:8px;"></i> Broken</span>
+                    <span class="leg-unavail"  ><i class="fa fa-circle" style="font-size:8px;"></i> Unavailable</span>
+                </div>
+                <div id="managePCGrid" class="pc-manage-grid"></div>
+                <div id="pcSummaryRow" style="display:flex; gap:10px; flex-wrap:wrap; margin-top:8px; font-size:12px; font-weight:700;"></div>
+            </div>
+            <div class="modal-footer" style="justify-content: space-between; align-items: center;">
+                <span style="font-size: 12px; color: #858796;"><i class="fa fa-save"></i> Changes saved to database automatically.</span>
+                <button class="btn-cancel" onclick="closeModal('managePCModal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PC Context Menu -->
+    <div id="pcContextMenu" class="pc-context-menu">
+        <div class="menu-title" id="contextMenuTitle">PC1 — Change Status</div>
+        <div class="menu-item opt-available" onclick="setPCStatus('Available')">
+            <i class="fa fa-check-circle"></i> Mark as Available
+        </div>
+        <div class="menu-item opt-used" onclick="setPCStatus('Used')">
+            <i class="fa fa-desktop"></i> Mark as In Use
+        </div>
+        <div class="menu-item opt-broken" onclick="setPCStatus('Broken')">
+            <i class="fa fa-tools"></i> Mark as Broken
+        </div>
+        <div class="menu-item opt-unavail" onclick="setPCStatus('Unavailable')">
+            <i class="fa fa-ban"></i> Mark as Unavailable
+        </div>
+    </div>
+
     <div style="padding: 25px 30px 0; max-width: 1400px; margin: auto;">
         <div class="page-title"><i class="fa-solid fa-calendar-check"></i> Manage Reservations</div>
     </div>
+
     <!-- Main Grid -->
     <div class="reservation-grid">
-        
         <!-- Panel 1: Computer Control -->
         <div class="panel">
             <div class="panel-header">Computer Control</div>
@@ -708,10 +591,9 @@
                 <button class="btn-refresh" onclick="fetchReservations()">
                     <i class="fa fa-refresh"></i> Refresh
                 </button>
-                <div class="status-legend">
-                    <span class="badge-avail">Available</span>
-                    <span class="badge-used">Used</span>
-                </div>
+                <button class="btn-manage-pc" onclick="openManagePCModal()">
+                    <i class="fa-solid fa-desktop"></i> Manage PC
+                </button>
             </div>
         </div>
 
@@ -732,222 +614,170 @@
             </div>
             <div id="logBody" class="panel-body"></div>
         </div>
-
     </div>
 
 <script>
 
-    /* ══════════════════════════════════════
-    DARK / LIGHT MODE
-    ══════════════════════════════════════ */
+    /* ══ DARK / LIGHT MODE ══ */
     function applyTheme(theme) {
         document.documentElement.setAttribute('data-theme', theme);
-        const icon  = document.getElementById('themeIcon');
-        const label = document.getElementById('themeLabel');
-        if (theme === 'dark') {
-            icon.className  = 'fa-solid fa-sun';
-        } else {
-            icon.className  = 'fa-solid fa-moon';
-        }
+        document.getElementById('themeIcon').className = theme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
     }
-    
     function toggleTheme() {
-        const current = document.documentElement.getAttribute('data-theme');
-        const next    = current === 'dark' ? 'light' : 'dark';
+        const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
         localStorage.setItem('ccs_theme', next);
         applyTheme(next);
-    
-        // Animate the icon on toggle
         const icon = document.getElementById('themeIcon');
         icon.style.transform = 'rotate(360deg)';
         icon.style.transition = 'transform 0.4s ease';
         setTimeout(() => { icon.style.transform = ''; icon.style.transition = ''; }, 400);
     }
-    
-    // Load saved theme on page start
-    (function() {
-        const saved = localStorage.getItem('ccs_theme') || 'light';
-        applyTheme(saved);
-    })();
+    (function() { applyTheme(localStorage.getItem('ccs_theme') || 'light'); })();
 
+    /* ══ UNIFIED SIT-IN MODAL ══ */
     function openUnifiedModal() {
-            document.getElementById('unifiedSitInModal').style.display = 'flex';
+        document.getElementById('unifiedSitInModal').style.display = 'flex';
+        document.getElementById('searchResultsList').innerHTML = '';
+        document.getElementById('studentDetailsBox').style.display = 'none';
+        document.getElementById('uniFooter').style.display = 'none';
+        document.getElementById('uniIdSearch').value = '';
+        document.getElementById('uniPCSection').style.display = 'none';
+        document.getElementById('uniPCNumber').value = '';
+    }
+
+    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+    let searchTimer;
+    document.getElementById('uniIdSearch').addEventListener('input', function() {
+        const query = this.value.trim();
+        clearTimeout(searchTimer);
+        if (!query) {
             document.getElementById('searchResultsList').innerHTML = '';
             document.getElementById('studentDetailsBox').style.display = 'none';
             document.getElementById('uniFooter').style.display = 'none';
-            document.getElementById('uniIdSearch').value = '';
-            document.getElementById('uniPCSection').style.display = 'none';
-            document.getElementById('uniPCNumber').value = '';
+            return;
         }
+        searchTimer = setTimeout(() => searchAndPopulate(), 300);
+    });
 
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-
-                let searchTimer;
-
-
-        document.getElementById('uniIdSearch').addEventListener('input', function() {
-            const query = this.value.trim();
-            
-            clearTimeout(searchTimer);
-
-            if (query.length === 0) {
-                document.getElementById('searchResultsList').innerHTML = '';
+    async function searchAndPopulate() {
+        const query = document.getElementById('uniIdSearch').value.trim();
+        const list  = document.getElementById('searchResultsList');
+        if (!query) return;
+        try {
+            const res  = await fetch(`http://localhost:3000/search-students?q=${encodeURIComponent(query)}`);
+            const data = await res.json();
+            if (res.ok && data.length > 0) {
+                list.innerHTML = data.map(s => {
+                    const initials = (s.firstName[0] + s.lastName[0]).toUpperCase();
+                    return `<div class="search-result-item" onclick='selectStudent(${JSON.stringify(s)})'>
+                        <div class="user-avatar">${initials}</div>
+                        <div class="user-info-text">
+                            <span class="name">${s.firstName} ${s.lastName}</span>
+                            <div class="meta"><span>ID: ${s.idNumber}</span><span>${s.course} ${s.yearLevel}</span></div>
+                        </div>
+                        <div class="user-status-badges">
+                            <span class="badge-sessions">${s.remainingSession ?? 30} sessions</span>
+                            <span style="color:#4e73df; font-size:10px;">Click to select</span>
+                        </div>
+                    </div>`;
+                }).join('');
                 document.getElementById('studentDetailsBox').style.display = 'none';
                 document.getElementById('uniFooter').style.display = 'none';
-                return;
+            } else {
+                list.innerHTML = '<p style="text-align:center; color:#858796; font-size:12px; padding:10px;">No student found.</p>';
             }
+        } catch(e) { console.error("Search Error:", e); }
+    }
 
-            searchTimer = setTimeout(() => {
-                searchAndPopulate();
-            }, 300); 
-        });
-
-        async function searchAndPopulate() {
-            const query = document.getElementById('uniIdSearch').value.trim();
-            const list  = document.getElementById('searchResultsList');
-            const details = document.getElementById('studentDetailsBox');
-
-            if (!query) return;
-
-            try {
-                const res  = await fetch(`http://localhost:3000/search-students?q=${encodeURIComponent(query)}`);
-                const data = await res.json();
-
-                if (res.ok && data.length > 0) {
-                    list.innerHTML = data.map(student => {
-                        const initials = (student.firstName[0] + student.lastName[0]).toUpperCase();
-                        return `
-                            <div class="search-result-item" onclick='selectStudent(${JSON.stringify(student)})'>
-                                <div class="user-avatar">${initials}</div>
-                                <div class="user-info-text">
-                                    <span class="name">${student.firstName} ${student.lastName}</span>
-                                    <div class="meta">
-                                        <span>ID: ${student.idNumber}</span>
-                                        <span>${student.course} ${student.yearLevel}</span>
-                                    </div>
-                                </div>
-                                <div class="user-status-badges">
-                                    <span class="badge-sessions">${student.remainingSession ?? 30} sessions</span>
-                                    <span style="color:#4e73df; font-size:10px;">Click to select</span>
-                                </div>
-                            </div>`;
-                    }).join('');
-                    details.style.display = 'none';
-                    document.getElementById('uniFooter').style.display = 'none';
-                } else {
-                    list.innerHTML = '<p style="text-align:center; color:#858796; font-size:12px; padding:10px;">No student found.</p>';
-                }
-            } catch (e) { console.error("Search Error:", e); }
-        }
-
-        function selectStudent(data) {
-            document.getElementById('searchResultsList').innerHTML = '';
-            document.getElementById('studentDetailsBox').style.display = 'block';
-            document.getElementById('uniFooter').style.display = 'flex';
-
-            document.getElementById('uniIdSearch').value = data.idNumber;
-
-            const remaining = data.remainingSession ?? 30;
-            document.getElementById('accountInfoDisplay').innerHTML = `
-                <span class="profile-name">${data.firstName} ${data.lastName}</span>
-                <div class="profile-meta">
-                    <div class="meta-item"><label>ID Number</label><span>${data.idNumber}</span></div>
-                    <div class="meta-item"><label>Remaining Sessions</label>
-                        <span style="color:${remaining <= 0 ? '#dc3545' : '#1cc88a'}; font-weight:700;">
-                            ${remaining} / 30
-                        </span>
-                    </div>
+    function selectStudent(data) {
+        document.getElementById('searchResultsList').innerHTML = '';
+        document.getElementById('studentDetailsBox').style.display = 'block';
+        document.getElementById('uniFooter').style.display = 'flex';
+        document.getElementById('uniIdSearch').value = data.idNumber;
+        const remaining = data.remainingSession ?? 30;
+        document.getElementById('accountInfoDisplay').innerHTML = `
+            <span class="profile-name">${data.firstName} ${data.lastName}</span>
+            <div class="profile-meta">
+                <div class="meta-item"><label>ID Number</label><span>${data.idNumber}</span></div>
+                <div class="meta-item"><label>Remaining Sessions</label>
+                    <span style="color:${remaining <= 0 ? '#dc3545' : '#1cc88a'}; font-weight:700;">${remaining} / 30</span>
                 </div>
-                ${remaining <= 0 ? '<p style="color:#dc3545; font-size:12px; margin-top:8px;"><i class="fa fa-exclamation-triangle"></i> This student has no remaining sessions.</p>' : ''}`;
+            </div>
+            ${remaining <= 0 ? '<p style="color:#dc3545; font-size:12px; margin-top:8px;"><i class="fa fa-exclamation-triangle"></i> No remaining sessions.</p>' : ''}`;
+        const confirmBtn = document.querySelector('#uniFooter .btn-confirm');
+        confirmBtn.disabled      = remaining <= 0;
+        confirmBtn.style.opacity = remaining <= 0 ? '0.5' : '1';
+        confirmBtn.style.cursor  = remaining <= 0 ? 'not-allowed' : 'pointer';
+        document.getElementById('uniPCSection').style.display = 'block';
+        renderUniPCGrid();
+    }
 
-            const confirmBtn = document.querySelector('#uniFooter .btn-confirm');
-            confirmBtn.disabled      = remaining <= 0;
-            confirmBtn.style.opacity = remaining <= 0 ? '0.5' : '1';
-            confirmBtn.style.cursor  = remaining <= 0 ? 'not-allowed' : 'pointer';
-            document.getElementById('uniPCSection').style.display = 'block';
-            renderUniPCGrid();
+    function renderUniPCGrid() {
+        const grid = document.getElementById('uniPCGrid');
+        document.getElementById('uniPCNumber').value = '';
+        grid.innerHTML = '';
+        for (let i = 1; i <= 45; i++) {
+            const pc  = `PC${i}`;
+            const btn = document.createElement('button');
+            btn.textContent = pc;
+            btn.type = 'button';
+            btn.style.cssText = 'padding: 5px 2px; font-size: 11px; border: 1px solid #4e73df; border-radius: 4px; background: transparent; color: #4e73df; cursor: pointer; font-weight: 600;';
+            btn.onclick = function () {
+                document.querySelectorAll('#uniPCGrid button').forEach(b => { b.style.background = 'transparent'; b.style.color = '#4e73df'; });
+                btn.style.background = '#4e73df';
+                btn.style.color = 'white';
+                document.getElementById('uniPCNumber').value = pc;
+            };
+            grid.appendChild(btn);
         }
+    }
 
-        function renderUniPCGrid() {
-            const grid = document.getElementById('uniPCGrid');
-            document.getElementById('uniPCNumber').value = '';
-            grid.innerHTML = '';
-            for (let i = 1; i <= 45; i++) {
-                const pc = `PC${i}`;
-                const btn = document.createElement('button');
-                btn.textContent = pc;
-                btn.type = 'button';
-                btn.style.cssText = 'padding: 5px 2px; font-size: 11px; border: 1px solid #4e73df; border-radius: 4px; background: transparent; color: #4e73df; cursor: pointer; font-weight: 600;';
-                btn.onclick = function () {
-                    document.querySelectorAll('#uniPCGrid button').forEach(b => {
-                        b.style.background = 'transparent';
-                        b.style.color = '#4e73df';
-                    });
-                    btn.style.background = '#4e73df';
-                    btn.style.color = 'white';
-                    document.getElementById('uniPCNumber').value = pc;
-                };
-                grid.appendChild(btn);
+    async function submitUnifiedSitIn() {
+        const idNumber = document.getElementById('uniIdSearch').value.trim();
+        const purpose  = document.getElementById('uniPurpose').value;
+        const lab      = document.getElementById('uniLab').value;
+        const pcNumber = document.getElementById('uniPCNumber').value;
+        if (!idNumber) return Swal.fire('Warning', 'No student selected.', 'warning');
+        if (!pcNumber) return Swal.fire('Warning', 'Please select a PC number.', 'warning');
+        try {
+            const res = await fetch('http://localhost:3000/sit-in', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ idNumber, purpose, lab, pcNumber })
+            });
+            if (res.ok) {
+                await Swal.fire({ icon: 'success', title: 'Sit-in Recorded!', timer: 1500, showConfirmButton: false });
+                closeModal('unifiedSitInModal');
+            } else {
+                const txt = await res.text();
+                Swal.fire('Error', txt, 'error');
             }
-        }
+        } catch(e) { Swal.fire('Error', 'Connection failed.', 'error'); }
+    }
 
-        async function submitUnifiedSitIn() {
-            const idNumber = document.getElementById('uniIdSearch').value.trim();
-            const purpose  = document.getElementById('uniPurpose').value;
-            const lab      = document.getElementById('uniLab').value;
-            const pcNumber = document.getElementById('uniPCNumber').value;
-
-            if (!idNumber) return Swal.fire('Warning', 'No student selected. Please search and click a student first.', 'warning');
-            if (!pcNumber) return Swal.fire('Warning', 'Please select a PC number.', 'warning');
-
-            try {
-                const res = await fetch('http://localhost:3000/sit-in', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ idNumber, purpose, lab, pcNumber })
-                });
-                if (res.ok) {
-                    await Swal.fire({ icon: 'success', title: 'Sit-in Recorded!', timer: 1500, showConfirmButton: false });
-                    closeModal('unifiedSitInModal');
-                } else {
-                    const txt = await res.text();
-                    Swal.fire('Error', txt, 'error');
-                }
-            } catch (e) { Swal.fire('Error', 'Connection failed.', 'error'); }
-        }
-
-    // ── Fetch & Render Reservation Requests ─────────────────
+    /* ══ RESERVATIONS ══ */
     async function fetchReservations() {
         try {
             const res  = await fetch("http://localhost:3000/admin/reservations");
             const data = await res.json();
-
             const labFilter   = document.getElementById("labFilter").value;
             const requestBody = document.getElementById("requestBody");
             const logBody     = document.getElementById("logBody");
-
             requestBody.innerHTML = "";
             logBody.innerHTML     = "";
-
-            // Filter by selected lab
             const filtered = data.filter(r => r.lab === labFilter);
-
-            // Count pending for the badge
-            const pendingItems = filtered.filter(r => r.status === 'Pending');
-            document.getElementById('pendingCount').textContent = pendingItems.length;
+            document.getElementById('pendingCount').textContent = filtered.filter(r => r.status === 'Pending').length;
             document.getElementById('logCount').textContent     = filtered.length;
 
-            if (filtered.length === 0) {
-                requestBody.innerHTML = `<div class="empty-state"><i class="fa fa-inbox"></i>No reservation requests for Lab ${labFilter}</div>`;
-                logBody.innerHTML     = `<div class="empty-state"><i class="fa fa-list"></i>No logs for Lab ${labFilter}</div>`;
+            if (!filtered.length) {
+                requestBody.innerHTML = `<div class="empty-state"><i class="fa fa-inbox"></i>No reservation requests for ${labFilter}</div>`;
+                logBody.innerHTML     = `<div class="empty-state"><i class="fa fa-list"></i>No logs for ${labFilter}</div>`;
                 return;
             }
 
             let hasPending = false;
-
             filtered.forEach(rev => {
-
-                // ── Requests Panel (Pending only) ──
                 if (rev.status === 'Pending') {
                     hasPending = true;
                     requestBody.innerHTML += `
@@ -960,17 +790,11 @@
                             <p><b>Computer Number:</b> ${rev.pcNumber || 'N/A'}</p>
                             <p><b>Purpose:</b> ${rev.purpose}</p>
                             <div class="action-btns">
-                                <button class="btn-accept" onclick="updateStatus(${rev.id}, 'Accepted')">
-                                    <i class="fa fa-check"></i> Accept
-                                </button>
-                                <button class="btn-deny" onclick="updateStatus(${rev.id}, 'Denied')">
-                                    <i class="fa fa-times"></i> Deny
-                                </button>
+                                <button class="btn-accept" onclick="updateStatus(${rev.id}, 'Accepted')"><i class="fa fa-check"></i> Accept</button>
+                                <button class="btn-deny"   onclick="updateStatus(${rev.id}, 'Denied')"><i class="fa fa-times"></i> Deny</button>
                             </div>
                         </div>`;
                 }
-
-                // ── Logs Panel (All statuses) ──
                 const statusClass = `status-${rev.status.toLowerCase()}`;
                 logBody.innerHTML += `
                     <div class="log-entry">
@@ -985,18 +809,14 @@
             });
 
             if (!hasPending) {
-                requestBody.innerHTML = `<div class="empty-state"><i class="fa fa-check-circle"></i>No pending requests for Lab ${labFilter}</div>`;
+                requestBody.innerHTML = `<div class="empty-state"><i class="fa fa-check-circle"></i>No pending requests for ${labFilter}</div>`;
             }
-
-        } catch (err) {
-            console.error("Load error:", err);
+        } catch(err) {
             Swal.fire('Error', 'Could not load reservations. Make sure server.js is running.', 'error');
         }
     }
 
-    // ── Accept or Deny ───────────────────────────────────────
     async function updateStatus(id, newStatus) {
-        const actionText = newStatus === 'Accepted' ? 'accept' : 'deny';
         const { isConfirmed } = await Swal.fire({
             title: `${newStatus === 'Accepted' ? 'Accept' : 'Deny'} Reservation?`,
             text: newStatus === 'Accepted'
@@ -1005,11 +825,9 @@
             icon: newStatus === 'Accepted' ? 'question' : 'warning',
             showCancelButton: true,
             confirmButtonColor: newStatus === 'Accepted' ? '#28a745' : '#dc3545',
-            confirmButtonText: `Yes, ${actionText} it!`
+            confirmButtonText: `Yes, ${newStatus === 'Accepted' ? 'accept' : 'deny'} it!`
         });
-
         if (!isConfirmed) return;
-
         try {
             const res  = await fetch("http://localhost:3000/admin/update-reservation", {
                 method: "POST",
@@ -1017,68 +835,203 @@
                 body: JSON.stringify({ id, status: newStatus })
             });
             const data = await res.json();
-
             if (res.ok) {
                 await Swal.fire({
                     icon: newStatus === 'Accepted' ? 'success' : 'info',
                     title: newStatus === 'Accepted' ? 'Accepted!' : 'Denied',
-                    text: data.message,
-                    timer: 2000,
-                    showConfirmButton: false
+                    text: data.message, timer: 2000, showConfirmButton: false
                 });
-                fetchReservations(); // Refresh the panels
+                fetchReservations();
             } else {
                 Swal.fire('Error', data.message || 'Something went wrong.', 'error');
             }
-        } catch (err) {
-            Swal.fire('Error', 'Connection failed. Check server.js is running.', 'error');
+        } catch(err) {
+            Swal.fire('Error', 'Connection failed.', 'error');
         }
     }
 
-   async function logout() {
-        const { isConfirmed } = await Swal.fire({
-            title: 'Logout Admin?',
-            text: "This will end your admin session.",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Yes, Logout!',
-            cancelButtonText: 'Stay Logged In'
-        });
+    /* ══════════════════════════════════════════════════
+       MANAGE PC — full DB-backed implementation
+    ══════════════════════════════════════════════════ */
 
-        if (!isConfirmed) return;
+    // In-memory cache so we don't re-fetch on every small interaction
+    const pcStatusStore = {};
 
+    function getPCStatus(lab, pc) {
+        return (pcStatusStore[lab] && pcStatusStore[lab][pc]) || 'Available';
+    }
+    function setPCStatusStore(lab, pc, status) {
+        if (!pcStatusStore[lab]) pcStatusStore[lab] = {};
+        pcStatusStore[lab][pc] = status;
+    }
+
+    let _contextPC = null, _contextLab = null;
+
+    function openManagePCModal() {
+        // Sync the modal lab selector to whatever lab is currently filtered
+        document.getElementById('managePCLab').value = document.getElementById('labFilter').value;
+        document.getElementById('managePCModal').style.display = 'flex';
+        renderManagePCGrid();
+    }
+
+    // Renders the grid — loads fresh statuses from DB each time the lab changes
+    async function renderManagePCGrid() {
+        const lab  = document.getElementById('managePCLab').value;
+        const grid = document.getElementById('managePCGrid');
+
+        // Show skeleton while loading
+        grid.innerHTML = '';
+        for (let i = 1; i <= 45; i++) {
+            const btn = document.createElement('button');
+            btn.className   = 'pc-btn loading';
+            btn.textContent = `PC${i}`;
+            grid.appendChild(btn);
+        }
+
+        // Fetch latest statuses from DB
         try {
+            const res  = await fetch(`http://localhost:3000/admin/pc-status/${encodeURIComponent(lab)}`);
+            const rows = await res.json();
+            // Seed the in-memory cache with DB values
+            rows.forEach(r => setPCStatusStore(lab, r.pcNumber, r.status));
+        } catch(e) {
+            console.warn('Could not load PC statuses from server:', e);
+        }
 
+        // Build actual grid
+        grid.innerHTML = '';
+        const counts = { Available: 0, Used: 0, Broken: 0, Unavailable: 0 };
+
+        for (let i = 1; i <= 45; i++) {
+            const pc     = `PC${i}`;
+            const status = getPCStatus(lab, pc);
+            counts[status] = (counts[status] || 0) + 1;
+
+            const btn = document.createElement('button');
+            btn.className   = `pc-btn status-${status.toLowerCase()}`;
+            btn.textContent = pc;
+            btn.title       = `${pc} — ${status}`;
+
+            btn.addEventListener('click',       (e) => showPCContextMenu(e, pc, lab));
+            btn.addEventListener('contextmenu', (e) => { e.preventDefault(); showPCContextMenu(e, pc, lab); });
+            grid.appendChild(btn);
+        }
+
+        renderPCSummary(counts);
+    }
+
+    function renderPCSummary(counts) {
+        document.getElementById('pcSummaryRow').innerHTML = `
+            <span class="leg-available">✔ Available: ${counts.Available || 0}</span>
+            <span class="leg-used">● In Use: ${counts.Used || 0}</span>
+            <span class="leg-broken">⚙ Broken: ${counts.Broken || 0}</span>
+            <span class="leg-unavail">⊘ Unavailable: ${counts.Unavailable || 0}</span>`;
+    }
+
+    function showPCContextMenu(e, pc, lab) {
+        _contextPC  = pc;
+        _contextLab = lab;
+        document.getElementById('contextMenuTitle').textContent = `${pc} — Change Status`;
+        const menu = document.getElementById('pcContextMenu');
+        const x = Math.min(e.clientX, window.innerWidth  - 210);
+        const y = Math.min(e.clientY, window.innerHeight - 200);
+        menu.style.left    = x + 'px';
+        menu.style.top     = y + 'px';
+        menu.style.display = 'block';
+        e.stopPropagation();
+    }
+
+    // ── THE KEY FUNCTION: saves to DB, updates cache, re-renders ──
+    async function setPCStatus(newStatus) {
+        if (!_contextPC || !_contextLab) return;
+
+        hidePCContextMenu();
+
+        // Optimistic UI update first so it feels instant
+        setPCStatusStore(_contextLab, _contextPC, newStatus);
+        renderManagePCGridFromCache(_contextLab); // fast re-render from cache
+
+        // Persist to DB
+        try {
+            const res = await fetch('http://localhost:3000/admin/pc-status', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ lab: _contextLab, pcNumber: _contextPC, status: newStatus })
+            });
+            if (!res.ok) throw new Error('Server error');
+        } catch(e) {
+            console.error('Could not save PC status:', e);
+            Swal.fire({ toast: true, position: 'bottom-end', icon: 'error', title: 'Failed to save to server', showConfirmButton: false, timer: 2500 });
+            return;
+        }
+
+        // Toast confirmation
+        const icons = { Available: 'success', Used: 'info', Broken: 'error', Unavailable: 'warning' };
+        const labels = { Available: '✔ Available', Used: '🖥 In Use', Broken: '⚙ Broken', Unavailable: '⊘ Unavailable' };
+        Swal.fire({
+            toast: true,
+            position: 'bottom-end',
+            icon: icons[newStatus] || 'info',
+            title: `${_contextPC} → <b>${labels[newStatus] || newStatus}</b>`,
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true
+        });
+    }
+
+    // Re-renders grid from in-memory cache (no DB call — used for instant feedback)
+    function renderManagePCGridFromCache(lab) {
+        const grid = document.getElementById('managePCGrid');
+        grid.innerHTML = '';
+        const counts = { Available: 0, Used: 0, Broken: 0, Unavailable: 0 };
+        for (let i = 1; i <= 45; i++) {
+            const pc     = `PC${i}`;
+            const status = getPCStatus(lab, pc);
+            counts[status] = (counts[status] || 0) + 1;
+            const btn = document.createElement('button');
+            btn.className   = `pc-btn status-${status.toLowerCase()}`;
+            btn.textContent = pc;
+            btn.title       = `${pc} — ${status}`;
+            btn.addEventListener('click',       (e) => showPCContextMenu(e, pc, lab));
+            btn.addEventListener('contextmenu', (e) => { e.preventDefault(); showPCContextMenu(e, pc, lab); });
+            grid.appendChild(btn);
+        }
+        renderPCSummary(counts);
+    }
+
+    function hidePCContextMenu() {
+        document.getElementById('pcContextMenu').style.display = 'none';
+    }
+
+    document.addEventListener('click',   (e) => {
+        if (!e.target.closest('#pcContextMenu') && !e.target.closest('.pc-btn')) hidePCContextMenu();
+    });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') hidePCContextMenu(); });
+
+    /* ══ LOGOUT ══ */
+    async function logout() {
+        const { isConfirmed } = await Swal.fire({
+            title: 'Logout Admin?', text: "This will end your admin session.", icon: 'warning',
+            showCancelButton: true, confirmButtonColor: '#d33', cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, Logout!', cancelButtonText: 'Stay Logged In'
+        });
+        if (!isConfirmed) return;
+        try {
             sessionStorage.removeItem("adminWelcomeShown");
             localStorage.removeItem("adminId");
             sessionStorage.clear();
-
-            await Swal.fire({
-                icon: 'success',
-                title: 'Logged Out',
-                text: 'Admin session ended successfully.',
-                timer: 1500,
-                showConfirmButton: false
-            });
-
+            await Swal.fire({ icon: 'success', title: 'Logged Out', text: 'Admin session ended.', timer: 1500, showConfirmButton: false });
             window.location.href = "index.html";
-
-        } catch (err) {
-            console.error("Admin logout error:", err);
-
+        } catch(err) {
             sessionStorage.clear();
             localStorage.removeItem("adminId");
-
             window.location.href = "index.html";
         }
-    }   
+    }
 
-    // ── On Load ──────────────────────────────────────────────
+    /* ══ ON LOAD ══ */
     document.addEventListener("DOMContentLoaded", () => {
         fetchReservations();
-        // Auto-refresh every 30 seconds
         setInterval(fetchReservations, 30000);
     });
 

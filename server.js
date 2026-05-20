@@ -96,6 +96,14 @@ db.serialize(() => {
         fileName    TEXT,
         dateAdded   TEXT
     )`);
+
+    db.run(`CREATE TABLE IF NOT EXISTS pc_status (
+        id        INTEGER PRIMARY KEY AUTOINCREMENT,
+        lab       TEXT NOT NULL,
+        pcNumber  TEXT NOT NULL,
+        status    TEXT DEFAULT 'Available',
+        UNIQUE(lab, pcNumber)
+    )`);
 });
 
 // --- REGISTER & LOGIN ---
@@ -746,6 +754,36 @@ app.delete("/software/:id", (req, res) => {
         if (this.changes === 0) return res.status(404).json({ message: "Not found" });
         res.json({ message: "Software deleted." });
     });
+});
+
+app.get("/admin/pc-status/:lab", (req, res) => {
+    const lab = decodeURIComponent(req.params.lab);
+    db.all(
+        `SELECT pcNumber, status FROM pc_status WHERE lab = ?`,
+        [lab],
+        (err, rows) => {
+            if (err) return res.status(500).json({ error: err.message });
+            res.json(rows); // e.g. [{ pcNumber: "PC1", status: "Broken" }, ...]
+        }
+    );
+});
+ 
+// POST – set / update a single PC's status (upsert)
+app.post("/admin/pc-status", (req, res) => {
+    const { lab, pcNumber, status } = req.body;
+    if (!lab || !pcNumber || !status) {
+        return res.status(400).json({ message: "lab, pcNumber, and status are required." });
+    }
+    db.run(
+        `INSERT INTO pc_status (lab, pcNumber, status)
+         VALUES (?, ?, ?)
+         ON CONFLICT(lab, pcNumber) DO UPDATE SET status = excluded.status`,
+        [lab, pcNumber, status],
+        (err) => {
+            if (err) return res.status(500).json({ error: err.message });
+            res.json({ message: `${pcNumber} in ${lab} set to ${status}.` });
+        }
+    );
 });
 
 app.listen(PORT, () => {
