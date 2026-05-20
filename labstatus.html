@@ -452,27 +452,27 @@ const BASE = 'http://localhost:3000';
 
 // Labs config — add or rename as needed to match your actual lab names
 const LABS_CONFIG = [
-    { name: 'Lab 524', alias: 'Laboratory 524', capacity: 40 },
-    { name: 'Lab 525', alias: 'Laboratory 525', capacity: 40 },
-    { name: 'Lab 526', alias: 'Laboratory 526', capacity: 40 },
-    { name: 'Lab 527', alias: 'Laboratory 527', capacity: 40 },
-    { name: 'Lab 528', alias: 'Laboratory 528', capacity: 40 },
+    { name: 'Lab 524', alias: 'Laboratory 524', capacity: 45 },
+    { name: 'Lab 525', alias: 'Laboratory 525', capacity: 45 },
+    { name: 'Lab 526', alias: 'Laboratory 526', capacity: 45 },
+    { name: 'Lab 527', alias: 'Laboratory 527', capacity: 45 },
+    { name: 'Lab 528', alias: 'Laboratory 528', capacity: 45 },
 ];
 
 /* ── Default software list (also reads from software.html localStorage) ── */
 const DEFAULT_SOFTWARE = [
-    { name: 'Microsoft Office 365', desc: 'Word, Excel, PowerPoint', icon: 'fa-file-word',    color: '#d94f3d', bg: '#d94f3d22' },
-    { name: 'Visual Studio Code',   desc: 'Code editor',             icon: 'fa-code',          color: '#007acc', bg: '#007acc22' },
-    { name: 'NetBeans IDE',         desc: 'Java development',        icon: 'fa-coffee',        color: '#f39c12', bg: '#f39c1222' },
-    { name: 'XAMPP',                desc: 'Local PHP server',        icon: 'fa-server',        color: '#e74c3c', bg: '#e74c3c22' },
-    { name: 'Python 3.x',           desc: 'Interpreter + IDLE',      icon: 'fa-python',        color: '#3776ab', bg: '#3776ab22' },
-    { name: 'Android Studio',       desc: 'Mobile development',      icon: 'fa-android',       color: '#3ddc84', bg: '#3ddc8422' },
-    { name: 'MySQL Workbench',      desc: 'Database management',     icon: 'fa-database',      color: '#00758f', bg: '#00758f22' },
-    { name: 'Figma (Browser)',      desc: 'UI/UX design',            icon: 'fa-pen-ruler',     color: '#a259ff', bg: '#a259ff22' },
-    { name: 'Google Chrome',        desc: 'Web browser',             icon: 'fa-globe',         color: '#4285f4', bg: '#4285f422' },
-    { name: 'Cisco Packet Tracer',  desc: 'Network simulation',      icon: 'fa-network-wired', color: '#1ba0d8', bg: '#1ba0d822' },
-    { name: 'Adobe Photoshop',      desc: 'Photo editing',           icon: 'fa-image',         color: '#31a8ff', bg: '#31a8ff22' },
-    { name: 'VMware Workstation',   desc: 'Virtual machines',        icon: 'fa-hard-drive',    color: '#607078', bg: '#60707822' },
+    { name: 'Microsoft Office 365', desc: 'Word, Excel, PowerPoint', icon: 'fa-file-word',    color: '#d94f3d', bg: '#d94f3d22', labs: ['524','525','526','527','528'] },
+    { name: 'Visual Studio Code',   desc: 'Code editor',             icon: 'fa-code',          color: '#007acc', bg: '#007acc22', labs: ['524','525','526','527','528'] },
+    { name: 'NetBeans IDE',         desc: 'Java development',        icon: 'fa-coffee',        color: '#f39c12', bg: '#f39c1222', labs: ['524','526'] },
+    { name: 'XAMPP',                desc: 'Local PHP server',        icon: 'fa-server',        color: '#e74c3c', bg: '#e74c3c22', labs: ['524','525','526','527','528'] },
+    { name: 'Python 3.x',           desc: 'Interpreter + IDLE',      icon: 'fa-python',        color: '#3776ab', bg: '#3776ab22', labs: ['524','525','526','527','528'] },
+    { name: 'Android Studio',       desc: 'Mobile development',      icon: 'fa-android',       color: '#3ddc84', bg: '#3ddc8422', labs: ['526','528'] },
+    { name: 'MySQL Workbench',      desc: 'Database management',     icon: 'fa-database',      color: '#00758f', bg: '#00758f22', labs: ['524','528'] },
+    { name: 'Figma (Browser)',      desc: 'UI/UX design',            icon: 'fa-pen-ruler',     color: '#a259ff', bg: '#a259ff22', labs: ['524','525','526','527','528'] },
+    { name: 'Google Chrome',        desc: 'Web browser',             icon: 'fa-globe',         color: '#4285f4', bg: '#4285f422', labs: ['524','525','526','527','528'] },
+    { name: 'Cisco Packet Tracer',  desc: 'Network simulation',      icon: 'fa-network-wired', color: '#1ba0d8', bg: '#1ba0d822', labs: ['528'] },
+    { name: 'Adobe Photoshop',      desc: 'Photo editing',           icon: 'fa-image',         color: '#31a8ff', bg: '#31a8ff22', labs: ['526','528'] },
+    { name: 'VMware Workstation',   desc: 'Virtual machines',        icon: 'fa-hard-drive',    color: '#607078', bg: '#60707822', labs: ['524','525','526','527','528'] },
 ];
 
 // ── NOTIFICATION ─────────────────────────────────────────────────────────
@@ -633,22 +633,40 @@ function renderSoftware() {
     let registered = [];
     try { registered = JSON.parse(localStorage.getItem('ccs_software') || '[]'); } catch(e) {}
     const list = registered.length > 0 ? registered : DEFAULT_SOFTWARE;
- 
+
     document.getElementById('softwareGrid').innerHTML = list.map(sw => {
         const name  = sw.name  || 'Unknown';
         const desc  = sw.desc  || sw.category || '';
-        const icon  = sw.icon  || 'fa-box';
+        const icon  = sw.icon  || 'fa-code';
         const color = sw.color || '#4e73df';
         const bg    = sw.bg    || color + '22';
+
+        let labTagsHtml = '';
+        if (sw.labs && sw.labs.length > 0) {
+            const hasAll = sw.labs.length >= 5;
+            if (hasAll) {
+                labTagsHtml = `<span style="background:#e8f5e9; color:#2e7d32; border-radius:20px; padding:2px 10px; font-size:10px; font-weight:700;">ALL LABS</span>`;
+            } else {
+                labTagsHtml = sw.labs.map(l =>
+                    `<span style="background:#e3f2fd; color:#1565c0; border-radius:20px; padding:2px 8px; font-size:10px; font-weight:700;">LAB ${l}</span>`
+                ).join('');
+            }
+        } else {
+            labTagsHtml = `<span style="background:#e8f5e9; color:#2e7d32; border-radius:20px; padding:2px 10px; font-size:10px; font-weight:700;">ALL LABS</span>`;
+        }
+
         return `
             <div class="sw-card">
-                <div class="sw-icon" style="background:${bg};color:${color};">
+                <div class="sw-icon" style="background:${bg}; color:${color};">
                     <i class="fa-solid ${icon}"></i>
                 </div>
                 <div>
                     <span class="sw-name">${name}</span>
                     <span class="sw-desc">${desc}</span>
-                    <span class="sw-installed"><i class="fa fa-circle-check"></i> Installed</span>
+                    <div style="display:flex; align-items:center; gap:6px; margin-top:5px; flex-wrap:wrap;">
+                        <span class="sw-installed"><i class="fa fa-circle-check"></i> Installed</span>
+                        ${labTagsHtml}
+                    </div>
                 </div>
             </div>`;
     }).join('');

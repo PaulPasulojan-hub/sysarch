@@ -55,6 +55,7 @@
         .icon-green  { background: #d1fae5; color: #059669; }
         .icon-yellow { background: #fef3c7; color: #d97706; }
         .icon-purple { background: #ede9fe; color: #7c3aed; }
+        .icon-red    { background: #fee2e2; color: #dc2626; }
 
         .stat-value {
             font-size: 26px;
@@ -381,6 +382,7 @@
         [data-theme="dark"] .icon-green  { background: #064e3b; color: #34d399; }
         [data-theme="dark"] .icon-yellow { background: #451a03; color: #fbbf24; }
         [data-theme="dark"] .icon-purple { background: #2e1065; color: #a78bfa; }
+        [data-theme="dark"] .icon-red    { background: #450a0a; color: #f87171; }
         [data-theme="dark"] .sum-card-header { background: #1e2a50; }
         [data-theme="dark"] .activity-table thead tr { background: var(--thead-bg); }
         [data-theme="dark"] .activity-table th { color: var(--text-muted); }
@@ -438,31 +440,31 @@
     <!-- STAT CARDS -->
     <div class="stats-row">
         <div class="stat-card">
-            <div class="stat-icon icon-blue"><i class="fa fa-laptop"></i></div>
-            <div class="stat-info">
-                <div class="stat-value" id="statTotalSitins">—</div>
-                <div class="stat-label">Total Sit-ins</div>
-            </div>
-        </div>
-        <div class="stat-card">
             <div class="stat-icon icon-green"><i class="fa fa-clock"></i></div>
             <div class="stat-info">
                 <div class="stat-value" id="statTotalHours">—</div>
-                <div class="stat-label">Total Hours</div>
+                <div class="stat-label">Total Sit-in Hours</div>
             </div>
         </div>
         <div class="stat-card">
-            <div class="stat-icon icon-yellow"><i class="fa fa-trophy"></i></div>
+            <div class="stat-icon icon-blue"><i class="fa fa-laptop"></i></div>
             <div class="stat-info">
-                <div class="stat-value" id="statPoints">—</div>
-                <div class="stat-label">Total Points</div>
+                <div class="stat-value" id="statNumSessions">—</div>
+                <div class="stat-label">Number of Sessions</div>
             </div>
         </div>
         <div class="stat-card">
             <div class="stat-icon icon-purple"><i class="fa fa-hourglass-half"></i></div>
             <div class="stat-info">
                 <div class="stat-value" id="statAvgSession">—</div>
-                <div class="stat-label">Avg Session</div>
+                <div class="stat-label">Avg Session Duration</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon icon-red"><i class="fa fa-fire"></i></div>
+            <div class="stat-info">
+                <div class="stat-value" id="statLongest">—</div>
+                <div class="stat-label">Longest Session</div>
             </div>
         </div>
     </div>
@@ -763,11 +765,13 @@ async function loadSummary() {
         // ── COMPUTE STATS ──
         const totalSitins = history.length;
         let totalMins = 0;
+        let longestMins = 0;
         const purposeMap = {};
 
         history.forEach(row => {
             const mins = parseMinutes(row.timeIn, row.timeOut);
             totalMins += mins;
+            if (mins > longestMins) longestMins = mins;
             const p = row.purpose || 'Other';
             purposeMap[p] = (purposeMap[p] || 0) + 1;
         });
@@ -782,10 +786,10 @@ async function loadSummary() {
         const points = totalSitins + timeBonus + longBonus;
 
         // ── STAT CARDS ──
-        document.getElementById('statTotalSitins').textContent = totalSitins;
         document.getElementById('statTotalHours').textContent  = fmtMins(totalMins);
-        document.getElementById('statPoints').textContent      = points;
+        document.getElementById('statNumSessions').textContent = totalSitins;
         document.getElementById('statAvgSession').textContent  = fmtMins(avgMins);
+        document.getElementById('statLongest').textContent     = fmtMins(longestMins);
 
         // ── SESSION GAUGE ──
         document.getElementById('gaugeLabel').textContent       = remaining;

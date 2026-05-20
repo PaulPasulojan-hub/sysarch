@@ -66,43 +66,6 @@
 
         .card-body { padding: 20px; }
 
-        /* ── DROPZONE ── */
-        .dropzone {
-            border: 2px dashed #c5cde8;
-            border-radius: 12px;
-            padding: 35px 20px;
-            text-align: center;
-            background: #f8f9fc;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            margin-bottom: 15px;
-        }
-
-        .dropzone:hover, .dropzone.dragover {
-            border-color: #2c3e70;
-            background: #eef0f8;
-        }
-
-        .dropzone i {
-            font-size: 38px;
-            color: #f6c23e;
-            margin-bottom: 10px;
-            display: block;
-        }
-
-        .dropzone p {
-            color: #6e7d9b;
-            font-size: 13.5px;
-            margin: 0;
-        }
-
-        .dropzone p span {
-            display: block;
-            font-size: 11px;
-            color: #aaa;
-            margin-top: 4px;
-        }
-
         /* ── FILE PREVIEW ── */
         .file-preview {
             display: none;
@@ -739,7 +702,7 @@
         }
         .search-wrapper input::placeholder { color: var(--text-muted) !important; }
  
-        input, select, textarea, .modern-select {
+        input:not([type="checkbox"]), select, textarea, .modern-select {
             background: var(--bg-input) !important;
             color: var(--text-main) !important;
             border-color: var(--input-border) !important;
@@ -810,14 +773,11 @@
  
         /* ── SOFTWARE ── */
         [data-theme="dark"] .software-container { background: var(--bg-page) !important; }
-        [data-theme="dark"] .dropzone { background: var(--bg-card-alt) !important; border-color: var(--input-border) !important; }
-        [data-theme="dark"] .dropzone:hover, [data-theme="dark"] .dropzone.dragover { background: #1e2a50 !important; border-color: #4e73df !important; }
-        [data-theme="dark"] .dropzone p { color: var(--text-muted) !important; }
         [data-theme="dark"] .file-preview { background: var(--bg-card-alt) !important; border-color: var(--input-border) !important; }
  
         /* ── REWARDS ── */
         [data-theme="dark"] .rw-card { background: var(--bg-card) !important; border-color: var(--border-inner) !important; }
-        [data-theme="dark"] .form-group input,
+        [data-theme="dark"] .form-group input:not([type="checkbox"]),
         [data-theme="dark"] .form-group select,
         [data-theme="dark"] .form-group textarea { background: var(--bg-input) !important; color: var(--text-main) !important; border-color: var(--input-border) !important; }
         [data-theme="dark"] .form-group input::placeholder,
@@ -905,14 +865,8 @@
             color: #7b9cff !important;
         }
 
-        /* ── Dropzone ── */
-        [data-theme="dark"] .dropzone {
-            background: #1e2235 !important;
-            border-color: #3a3f5c !important;
-        }
-
         /* ── Form inputs & labels ── */
-        [data-theme="dark"] .form-group input,
+        [data-theme="dark"] .form-group input:not([type="checkbox"]),
         [data-theme="dark"] .form-group select,
         [data-theme="dark"] .form-group textarea {
             background: #252839 !important;
@@ -977,14 +931,6 @@
                     <span><i class="fa-solid fa-cloud-arrow-up"></i> Upload Software / File</span>
                 </div>
                 <div class="card-body">
-                    <!-- Dropzone -->
-                    <div class="dropzone" id="dropzone" onclick="document.getElementById('fileInput').click()">
-                        <i class="fa-solid fa-cloud-arrow-up"></i>
-                        <p><strong>Drag &amp; drop files here</strong></p>
-                        <p><span>or click to browse .zip, .exe, .msi, .apk, .pdf, .docx supported</span></p>
-                    </div>
-                    <input type="file" id="fileInput" style="display:none"
-                           accept=".zip,.exe,.msi,.apk,.pdf,.docx,.rar,.7z">
 
                     <!-- File Preview -->
                     <div class="file-preview" id="filePreview">
@@ -1032,7 +978,7 @@
                                 <input type="checkbox" value="525"> Lab 525
                             </label>
                             <label class="lab-check-label">
-                                <input type="checkbox" value="525"> Lab 526
+                                <input type="checkbox" value="526"> Lab 526
                             </label>
                             <label class="lab-check-label">
                                 <input type="checkbox" value="527"> Lab 527
@@ -1225,16 +1171,6 @@
         if (this.files[0]) handleFile(this.files[0]);
     });
 
-    // ── DRAG & DROP ──
-    const dz = document.getElementById('dropzone');
-    dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('dragover'); });
-    dz.addEventListener('dragleave', () => dz.classList.remove('dragover'));
-    dz.addEventListener('drop', e => {
-        e.preventDefault();
-        dz.classList.remove('dragover');
-        if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
-    });
-
     function handleFile(file) {
         selectedFile = file;
         const preview = document.getElementById('filePreview');
@@ -1276,12 +1212,28 @@
         if (!cat)  return Swal.fire({ icon:'warning', title:'Missing Category', text:'Please select a category.', confirmButtonColor:'#2c3e70' });
         if (labs.length === 0) return Swal.fire({ icon:'warning', title:'No Lab Selected', text:'Please select at least one lab.', confirmButtonColor:'#2c3e70' });
 
+        // ✅ CORRECT — includes icon, color, bg based on category
+        const categoryStyles = {
+            'IDE / Code Editor':    { icon: 'fa-code',               color: '#007acc', bg: '#007acc22' },
+            'Programming Language': { icon: 'fa-terminal',           color: '#3776ab', bg: '#3776ab22' },
+            'Database Tool':        { icon: 'fa-database',           color: '#00758f', bg: '#00758f22' },
+            'Design Tool':          { icon: 'fa-pen-ruler',          color: '#a259ff', bg: '#a259ff22' },
+            'Productivity':         { icon: 'fa-briefcase',          color: '#d94f3d', bg: '#d94f3d22' },
+            'Utility':              { icon: 'fa-screwdriver-wrench', color: '#607078', bg: '#60707822' },
+            'Other':                { icon: 'fa-cube',               color: '#f39c12', bg: '#f39c1222' },
+        };
+
+        const style = categoryStyles[cat] || { icon: 'fa-cube', color: '#4e73df', bg: '#4e73df22' };
+
         const entry = {
             id:       Date.now(),
             name,
             category: cat,
             desc:     desc || '—',
             labs,
+            icon:     style.icon,
+            color:    style.color,
+            bg:       style.bg,
             fileName: selectedFile ? selectedFile.name : null,
             date:     new Date().toLocaleDateString('en-CA')
         };

@@ -680,6 +680,10 @@
             window.location.href = "index.html";
             return;
         }
+
+        const now = new Date();
+        document.getElementById("res-date").value = now.toLocaleDateString('en-CA');     // → YYYY-MM-DD
+        document.getElementById("res-time").value = now.toTimeString().slice(0, 5);
  
         try {
             const res = await fetch(`http://localhost:3000/student/${idNumber}`);
