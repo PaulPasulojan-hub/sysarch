@@ -1,1018 +1,1017 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>History Information - CCS Portal</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        .history-container {
-            padding: 40px;
-            display: flex;
-            justify-content: center;
-        }
-        .history-card {
-            background: white;
-            width: 90%;
-            max-width: 1200px;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>History Information - CCS Portal</title>
+        <link rel="stylesheet" href="style.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
+        <style>
+            .history-container {
+                padding: 40px;
+                display: flex;
+                justify-content: center;
+            }
+            .history-card {
+                background: white;
+                width: 90%;
+                max-width: 1200px;
+                padding: 30px;
+                border-radius: 12px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+                
+            }
+            .card-header {
+                background: #2c3e70;
+                color: white;
+                padding: 15px;
+                font-size: 25px;
+                font-weight: 600;
+                text-align: center;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 10px;
+                margin: -30px -30px 20px -30px;
+                border-radius: 12px 12px 0 0;
+            }
             
-        }
-        .card-header {
-            background: #2c3e70;
-            color: white;
-            padding: 15px;
-            font-size: 25px;
-            font-weight: 600;
-            text-align: center;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            margin: -30px -30px 20px -30px;
-            border-radius: 12px 12px 0 0;
-        }
-        
-        .styled-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            font-size: 0.9em;
+            .styled-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+                font-size: 0.9em;
+                
+            }
+            .styled-table thead tr {
+                
+                background-color: #2c3e70;
+                color: #ffffff;
+                text-align: left;
+                
+            }
+            .styled-table th, .styled-table td {
+                padding: 12px 15px;
+                border-bottom: 1px solid #dddddd;
+            }
+
+            .styled-table td {
+                font-family: 'Plus Jakarta Sans', sans-serif;
+            }
             
-        }
-        .styled-table thead tr {
+            .styled-table tbody tr:nth-of-type(even) {
+                background-color: #f3f3f3;
+            }
+            .feedback-btn {
+                background-color: #28a745;
+                color: white;
+                border: none;
+                padding: 8px 12px;
+                border-radius: 12px;
+                cursor: pointer;
+                font-weight: bold;
+                font-family: 'Plus Jakarta Sans', sans-serif;
+            }
+            .feedback-btn:hover {
+                background-color: #218838;
+                transform: translateY(-1px);
+            }
+
+            .table-header-actions {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 15px;
+            }
+
+            .styled-table th {
+                cursor: pointer;
+                user-select: none;
+            }
+            .sort-icon { 
+                margin-left: 4px; 
+                font-size: 0.75em; 
+                opacity: 0.6; 
+            }
+            .sort-icon.asc::after  { content: '▲'; opacity: 1; }
+            .sort-icon.desc::after { content: '▼'; opacity: 1; }
+            .sort-icon:not(.asc):not(.desc)::after { content: '⇅'; }
+
+            .table-footer {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-top: 15px;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            #entryInfo { 
+                font-size: 16px; color: #555; 
+            }
+
+            .pagination { 
+                display: flex; 
+                gap: 5px; 
+            }
+
+            .pagination button {
+                min-width: 32px;
+                height: 32px;
+                border: 1px solid #dee2e6;
+                background: white;
+                color: #333;
+                border-radius: 12px;
+                cursor: pointer;
+                font-size: 0.85em;
+            }
+
+            .pagination button:hover:not(:disabled) { 
+                background: #218838; 
+            }
+
+            .pagination button.active { 
+                background: #28a745; 
+                color: white; 
+            }
             
-            background-color: #2c3e70;
-            color: #ffffff;
-            text-align: left;
+            .pagination button:disabled { 
+                opacity: 0.4; 
+                cursor: not-allowed; 
+            }
+
+            .empty-row td { 
+                text-align: center; 
+                color: #888; 
+                padding: 30px; 
+            }
             
-        }
-        .styled-table th, .styled-table td {
-            padding: 12px 15px;
-            border-bottom: 1px solid #dddddd;
-        }
+            .notif-wrapper {
+                position: relative;
+            }
 
-        .styled-table td {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-        }
-        
-        .styled-table tbody tr:nth-of-type(even) {
-            background-color: #f3f3f3;
-        }
-        .feedback-btn {
-            background-color: #28a745;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: bold;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-        }
-        .feedback-btn:hover {
-            background-color: #218838;
-            transform: translateY(-1px);
-        }
+            .notif-badge {
+                display: none;
+                position: absolute;
+                top: -4px;
+                right: -6px;
+                background: #e24b4a;
+                color: white;
+                font-size: 10px;
+                border-radius: 50%;
+                width: 16px;
+                height: 16px;
+                align-items: center;
+                justify-content: center;
+                border: 2px solid #2c3e70;
+            }
 
-        .table-header-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
+            .notif-dropdown {
+                display: none;
+                position: absolute;
+                top: 36px;
+                right: 0;
+                width: 340px;
+                background: white;
+                border: 1px solid #ddd;
+                border-radius: 10px;
+                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+                z-index: 1000;
+                overflow: hidden;
+            }
 
-        .styled-table th {
-            cursor: pointer;
-            user-select: none;
-        }
-        .sort-icon { 
-            margin-left: 4px; 
-            font-size: 0.75em; 
-            opacity: 0.6; 
-        }
-        .sort-icon.asc::after  { content: '▲'; opacity: 1; }
-        .sort-icon.desc::after { content: '▼'; opacity: 1; }
-        .sort-icon:not(.asc):not(.desc)::after { content: '⇅'; }
+            .notif-header {
+                background: #2c3e70;
+                color: white;
+                padding: 10px 14px;
+                font-size: 14px;
+                font-weight: bold;
+            }
 
-        .table-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 15px;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        #entryInfo { 
-            font-size: 16px; color: #555; 
-        }
+            .notif-mark-btn {
+                float: right;
+                background: rgba(255, 255, 255, 0.2);
+                border: none;
+                color: white;
+                font-size: 11px;
+                padding: 2px 7px;
+                border-radius: 4px;
+                cursor: pointer;
+            }
 
-        .pagination { 
-            display: flex; 
-            gap: 5px; 
-        }
+            .notif-list {
+                max-height: 300px;
+                overflow-y: auto;
+            }
 
-        .pagination button {
-            min-width: 32px;
-            height: 32px;
-            border: 1px solid #dee2e6;
-            background: white;
-            color: #333;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 0.85em;
-        }
+            .theme-toggle-btn {
+                display: flex;
+                align-items: center;
+                background: rgba(255,255,255,0.12);
+                border: 1px solid rgba(255,255,255,0.22);
+                color: white;
+                padding: 3px;
+                border-radius: 20px;
+                transition: background 0.25s ease, transform 0.15s ease;
+            }
 
-        .pagination button:hover:not(:disabled) { 
-            background: #218838; 
-        }
+            .theme-toggle-btn:hover {
+                background: rgba(255,255,255,0.22);
+                transform: translateY(-1px);
+            }
 
-        .pagination button.active { 
-            background: #28a745; 
-            color: white; 
-        }
-        
-        .pagination button:disabled { 
-            opacity: 0.4; 
-            cursor: not-allowed; 
-        }
+            [data-theme="dark"] .theme-toggle-btn {
+                background: rgba(255,193,7,0.15);
+                border-color: rgba(255,193,7,0.4);
+                color: #ffc107;
+            }
 
-        .empty-row td { 
-            text-align: center; 
-            color: #888; 
-            padding: 30px; 
-        }
-        
-        .notif-wrapper {
-            position: relative;
-        }
+            /* ══════════════════════════════════════
+            DARK / LIGHT MODE - CSS VARIABLES
+            ══════════════════════════════════════ */
+            :root {
+                --bg-page:      #f0f2f5;
+                --bg-card:      #ffffff;
+                --bg-input:     #f6f6f6;
+                --text-main:    #333333;
+                --text-muted:   #555555;
+                --text-label:   #1a1a2e;
+                --border-color: #dddddd;
+                --border-inner: #cccccc;
+                --shadow:       0 10px 30px rgba(0,0,0,0.2);
+                --table-even:   #f3f3f3;
+                --table-hover:  #f8f9fc;
+                --thead-bg:     #f0f2f5;
+            }
+            [data-theme="dark"] {
+                --bg-page:      #0f1117;
+                --bg-card:      #1a1d27;
+                --bg-input:     #22263a;
+                --text-main:    #e0e0e0;
+                --text-muted:   #b0b8cc;
+                --text-label:   #ffffff;
+                --border-color: #2e3347;
+                --border-inner: #3a3f58;
+                --shadow:       0 10px 30px rgba(0,0,0,0.5);
+                --table-even:   #1e2235;
+                --table-hover:  #232840;
+                --thead-bg:     #1e2235;
+            }
+            body {
+                background: var(--bg-page);
+                color: var(--text-main);
+                transition: background 0.3s ease, color 0.3s ease;
+            }
+            [data-theme="dark"] .navbar {
+                background: linear-gradient(to right, #111827, #0a0a1a) !important;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.6);
+            }
+            [data-theme="dark"] .notif-dropdown {
+                background: var(--bg-card);
+                border-color: var(--border-color);
+            }
+    
+            /* history dark mode */
+            .history-container { background: var(--bg-page); }
+            .history-card {
+                background: var(--bg-card);
+                border-color: var(--border-color);
+                box-shadow: var(--shadow);
+                transition: background 0.3s, border-color 0.3s;
+            }
+            [data-theme="dark"] .styled-table thead tr { background-color: #1e2a50; }
+            [data-theme="dark"] .styled-table th,
+            [data-theme="dark"] .styled-table td { border-color: var(--border-color); color: var(--text-main); }
+            [data-theme="dark"] .styled-table tbody tr:nth-of-type(even) { background-color: var(--table-even); }
+            [data-theme="dark"] .styled-table tbody tr:hover { background-color: var(--table-hover); }
+            [data-theme="dark"] #entryInfo { color: var(--text-muted); }
+            [data-theme="dark"] .pagination button {
+                background: var(--bg-card);
+                border-color: var(--border-color);
+                color: var(--text-main);
+            }
+            [data-theme="dark"] .pagination button.active { background: #28a745; color: white; }
+            [data-theme="dark"] .empty-row td { color: var(--text-muted); }
+            [data-theme="dark"] .entries-control,
+            [data-theme="dark"] .entries-control select {
+                color: var(--text-main);
+                background: var(--bg-input);
+                border-color: var(--border-color);
+            }
+            [data-theme="dark"] #tableSearch {
+                background: var(--bg-input);
+                border-color: var(--border-color);
+                color: var(--text-main);
+            }
+            
+            /* ── STAR RATING MODAL ── */
+            #feedbackModal {
+                display: none;
+                position: fixed;
+                inset: 0;
+                background: rgba(0,0,0,0.5);
+                backdrop-filter: blur(4px);
+                z-index: 9999;
+                justify-content: center;
+                align-items: center;
+            }
+            #feedbackModal.open { display: flex; }
+            .fb-modal-box {
+                background: #fff;
+                border-radius: 14px;
+                width: 420px;
+                max-width: 95vw;
+                box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+                overflow: hidden;
+                animation: fbSlide 0.28s ease-out;
+            }
+             [data-theme="dark"] .fb-modal-box { background: #1a1d27; color: #e0e0e0; }
+            @keyframes fbSlide {
+                from { transform: translateY(-40px); opacity: 0; }
+                to   { transform: translateY(0);     opacity: 1; }
+            }
+            .fb-modal-header {
+                background: #2c3e70;
+                color: #fff;
+                padding: 15px 20px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                font-size: 16px;
+                font-weight: 700;
+            }
+            .fb-modal-header button {
+                background: none; border: none; color: #fff;
+                font-size: 22px; cursor: pointer; line-height: 1;
+            }
+            .fb-modal-body { padding: 22px 24px; }
+            .fb-label {
+                font-size: 14px; 
+                font-weight: 700;
+                color: #555; 
+                margin-bottom: 10px; 
+                display: block;
+            }
+            [data-theme="dark"] .fb-label { color: #b0b8cc; }
+            .star-picker {
+                display: flex;
+                flex-direction: row-reverse;
+                justify-content: center;
+                gap: 6px;
+                margin-bottom: 18px;
+                align-items: center;
+                width: 100%;
+            }
 
-        .notif-badge {
-            display: none;
-            position: absolute;
-            top: -4px;
-            right: -6px;
-            background: #e24b4a;
-            color: white;
-            font-size: 10px;
-            border-radius: 50%;
-            width: 16px;
-            height: 16px;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid #2c3e70;
-        }
-
-        .notif-dropdown {
-            display: none;
-            position: absolute;
-            top: 36px;
-            right: 0;
-            width: 340px;
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-            z-index: 1000;
-            overflow: hidden;
-        }
-
-        .notif-header {
-            background: #2c3e70;
-            color: white;
-            padding: 10px 14px;
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-        .notif-mark-btn {
-            float: right;
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            color: white;
-            font-size: 11px;
-            padding: 2px 7px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .notif-list {
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        .theme-toggle-btn {
-            display: flex;
-            align-items: center;
-            background: rgba(255,255,255,0.12);
-            border: 1px solid rgba(255,255,255,0.22);
-            color: white;
-            padding: 3px;
-            border-radius: 20px;
-            transition: background 0.25s ease, transform 0.15s ease;
-        }
-
-        .theme-toggle-btn:hover {
-            background: rgba(255,255,255,0.22);
-            transform: translateY(-1px);
-        }
-
-        [data-theme="dark"] .theme-toggle-btn {
-            background: rgba(255,193,7,0.15);
-            border-color: rgba(255,193,7,0.4);
-            color: #ffc107;
-        }
-
-         /* ══════════════════════════════════════
-           DARK / LIGHT MODE - CSS VARIABLES
-        ══════════════════════════════════════ */
-        :root {
-            --bg-page:      #f0f2f5;
-            --bg-card:      #ffffff;
-            --bg-input:     #f6f6f6;
-            --text-main:    #333333;
-            --text-muted:   #555555;
-            --text-label:   #1a1a2e;
-            --border-color: #dddddd;
-            --border-inner: #cccccc;
-            --shadow:       0 10px 30px rgba(0,0,0,0.2);
-            --table-even:   #f3f3f3;
-            --table-hover:  #f8f9fc;
-            --thead-bg:     #f0f2f5;
-        }
-        [data-theme="dark"] {
-            --bg-page:      #0f1117;
-            --bg-card:      #1a1d27;
-            --bg-input:     #22263a;
-            --text-main:    #e0e0e0;
-            --text-muted:   #b0b8cc;
-            --text-label:   #ffffff;
-            --border-color: #2e3347;
-            --border-inner: #3a3f58;
-            --shadow:       0 10px 30px rgba(0,0,0,0.5);
-            --table-even:   #1e2235;
-            --table-hover:  #232840;
-            --thead-bg:     #1e2235;
-        }
-        body {
-            background: var(--bg-page);
-            color: var(--text-main);
-            transition: background 0.3s ease, color 0.3s ease;
-        }
-        [data-theme="dark"] .navbar {
-            background: linear-gradient(to right, #111827, #0a0a1a) !important;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.6);
-        }
-        [data-theme="dark"] .notif-dropdown {
-            background: var(--bg-card);
-            border-color: var(--border-color);
-        }
- 
-        /* history dark mode */
-        .history-container { background: var(--bg-page); }
-        .history-card {
-            background: var(--bg-card);
-            border-color: var(--border-color);
-            box-shadow: var(--shadow);
-            transition: background 0.3s, border-color 0.3s;
-        }
-        [data-theme="dark"] .styled-table thead tr { background-color: #1e2a50; }
-        [data-theme="dark"] .styled-table th,
-        [data-theme="dark"] .styled-table td { border-color: var(--border-color); color: var(--text-main); }
-        [data-theme="dark"] .styled-table tbody tr:nth-of-type(even) { background-color: var(--table-even); }
-        [data-theme="dark"] .styled-table tbody tr:hover { background-color: var(--table-hover); }
-        [data-theme="dark"] #entryInfo { color: var(--text-muted); }
-        [data-theme="dark"] .pagination button {
-            background: var(--bg-card);
-            border-color: var(--border-color);
-            color: var(--text-main);
-        }
-        [data-theme="dark"] .pagination button.active { background: #28a745; color: white; }
-        [data-theme="dark"] .empty-row td { color: var(--text-muted); }
-        [data-theme="dark"] .entries-control,
-        [data-theme="dark"] .entries-control select {
-            color: var(--text-main);
-            background: var(--bg-input);
-            border-color: var(--border-color);
-        }
-        [data-theme="dark"] #tableSearch {
-            background: var(--bg-input);
-            border-color: var(--border-color);
-            color: var(--text-main);
-        }
-        
-        /* ── STAR RATING MODAL ── */
-        #feedbackModal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(4px);
-            z-index: 9999;
-            justify-content: center;
-            align-items: center;
-        }
-        #feedbackModal.open { display: flex; }
-        .fb-modal-box {
-            background: #fff;
-            border-radius: 14px;
-            width: 420px;
-            max-width: 95vw;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.35);
-            overflow: hidden;
-            animation: fbSlide 0.28s ease-out;
-        }
-        [data-theme="dark"] .fb-modal-box { background: #1a1d27; color: #e0e0e0; }
-        @keyframes fbSlide {
-            from { transform: translateY(-40px); opacity: 0; }
-            to   { transform: translateY(0);     opacity: 1; }
-        }
-        .fb-modal-header {
-            background: #2c3e70;
-            color: #fff;
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 16px;
-            font-weight: 700;
-        }
-        .fb-modal-header button {
-            background: none; border: none; color: #fff;
-            font-size: 22px; cursor: pointer; line-height: 1;
-        }
-        .fb-modal-body { padding: 22px 24px; }
-        .fb-label {
-            font-size: 14px; 
-            font-weight: 700;
-            color: #555; 
-            margin-bottom: 10px; 
-            display: block;
-        }
-        [data-theme="dark"] .fb-label { color: #b0b8cc; }
-        .star-picker {
-            display: flex;
-            flex-direction: row-reverse;
-            justify-content: center;
-            gap: 6px;
-            margin-bottom: 18px;
-            align-items: center;
-            width: 100%;
-        }
-
-        .star-picker input[type="radio"] { display: none; }
-        .star-picker label {
-            font-size: 32px;
-            color: #d0d0d0;
-            cursor: pointer;
-            transition: color 0.15s;
-        }
-        .star-picker label:hover,
-        .star-picker label:hover ~ label { color: #f5a623 !important; }
-        .star-picker input[type="radio"]:checked ~ label { color: #f5a623; }
-        #fbMessage {
-            width: 100%; box-sizing: border-box;
-            padding: 10px 12px;
-            border: 1px solid #ddd; border-radius: 8px;
-            font-size: 14px; font-family: 'Plus Jakarta Sans', sans-serif;
-            resize: vertical; min-height: 90px;
-            outline: none; transition: border-color 0.2s;
-        }
-        #fbMessage:focus { border-color: #2c3e70; }
-        [data-theme="dark"] #fbMessage {
-            background: #22263a; color: #e0e0e0;
-            border-color: #3a3f58;
-        }
-        .fb-modal-footer {
-            padding: 14px 24px;
-            background: #f8f9fc;
-            border-top: 1px solid #eee;
-            display: flex; justify-content: flex-end; gap: 10px;
-        }
-        [data-theme="dark"] .fb-modal-footer {
-            background: #161928; border-color: #2e3347;
-        }
-        .fb-btn-cancel {
-            background: #6c757d; 
-            color: #fff; 
-            border: none;
-            padding: 9px 18px; 
-            border-radius: 6px;
-            cursor: pointer; 
-            font-weight: 600;
-        }
-        .fb-btn-submit {
-            background: #2c3e70; 
-            color: #fff; 
-            border: none;
-            padding: 9px 18px; 
-            border-radius: 6px;
-            cursor: pointer; 
-            font-weight: 600;
-        }
-        .fb-btn-submit:hover { 
-            background: #1a2a55;
-            transform: translateY(-1px); 
-        }
-        .fb-btn-cancel:hover { 
-            background: #5a6268;
-            transform: translateY(-1px); 
-        }
-    </style>
-</head>
-<body>
-    <nav class="navbar">
-        <div class="logo-text"><i class="fa fa-history"></i> Student History</div>
-        <ul class="nav-links">
-            <li class="notif-wrapper">
-                <a href="#" onclick="toggleNotifDropdown(event)">
-                    <i class="fa fa-bell"></i> Notifications
-                </a>
-                <span id="notifBadge" class="notif-badge"></span>
-                <div id="notifDropdown" class="notif-dropdown">
-                    <div class="notif-header">
-                        <i class="fa fa-bell"></i> Announcements
-                        <button onclick="markAllRead()" class="notif-mark-btn">Mark all read</button>
+            .star-picker input[type="radio"] { display: none; }
+            .star-picker label {
+                font-size: 32px;
+                color: #d0d0d0;
+                cursor: pointer;
+                transition: color 0.15s;
+            }
+            .star-picker label:hover,
+            .star-picker label:hover ~ label { color: #f5a623 !important; }
+            .star-picker input[type="radio"]:checked ~ label { color: #f5a623; }
+            #fbMessage {
+                width: 100%; box-sizing: border-box;
+                padding: 10px 12px;
+                border: 1px solid #ddd; border-radius: 8px;
+                font-size: 14px; font-family: 'Plus Jakarta Sans', sans-serif;
+                resize: vertical; min-height: 90px;
+                outline: none; transition: border-color 0.2s;
+            }
+            #fbMessage:focus { border-color: #2c3e70; }
+            [data-theme="dark"] #fbMessage {
+                background: #22263a; color: #e0e0e0;
+                border-color: #3a3f58;
+            }
+            .fb-modal-footer {
+                padding: 14px 24px;
+                background: #f8f9fc;
+                border-top: 1px solid #eee;
+                display: flex; justify-content: flex-end; gap: 10px;
+            }
+            [data-theme="dark"] .fb-modal-footer {
+                background: #161928; border-color: #2e3347;
+            }
+            .fb-btn-cancel {
+                background: #6c757d; 
+                color: #fff; 
+                border: none;
+                padding: 9px 18px; 
+                border-radius: 6px;
+                cursor: pointer; 
+                font-weight: 600;
+            }
+            .fb-btn-submit {
+                background: #2c3e70; 
+                color: #fff; 
+                border: none;
+                padding: 9px 18px; 
+                border-radius: 6px;
+                cursor: pointer; 
+                font-weight: 600;
+            }
+            .fb-btn-submit:hover { 
+                background: #1a2a55;
+                transform: translateY(-1px); 
+            }
+            .fb-btn-cancel:hover { 
+                background: #5a6268;
+                transform: translateY(-1px); 
+            }
+        </style>
+    </head>
+    <body>
+        <nav class="navbar">
+            <div class="logo-text" style="color: blue;"><i class="fa fa-history"></i> Student History</div>
+            <ul class="nav-links">
+                <li class="notif-wrapper">
+                    <a href="#" onclick="toggleNotifDropdown(event)">
+                        <i class="fa fa-bell"></i> Notifications
+                    </a>
+                    <span id="notifBadge" class="notif-badge"></span>
+                    <div id="notifDropdown" class="notif-dropdown">
+                        <div class="notif-header">
+                            <i class="fa fa-bell"></i> Announcements
+                            <button onclick="markAllRead()" class="notif-mark-btn">Mark all read</button>
+                        </div>
+                        <div id="notifList" class="notif-list"></div>
                     </div>
-                    <div id="notifList" class="notif-list"></div>
+                <li><a href="dashboard.html"><i class="fa fa-home"></i> Dashboard</a></li>
+                <li><a href="editprofile.html"><i class="fa fa-pencil"></i> Edit Profile</a></li>
+                <li><a href="history.html" class="active"><i class="fa fa-history"></i> History</a></li>
+                <li><a href="reservation.html"><i class="fa fa-calendar"></i> Reservation</a></li>
+                <li><a href="leaderboard.html"><i class="fa fa-trophy"></i> Leaderboard</a></li>
+                <li><a href="mysummary.html"><i class="fa fa-chart-line"></i> My Summary</a></li>
+                <li><a href="labstatus.html"><i class="fa fa-desktop"></i> Lab Status</a></li>sktop"></i> Lab Status</a></li>
+                <li>
+                    <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()">
+                        <i class="fa-solid fa-moon" id="themeIcon"></i>
+                        <span id="themeLabel"></span>
+                    </button>
+                </li>
+                <li><a href="javascript:void(0)" onclick="logout()" class="logout"><i class="fa fa-sign-out"></i> Logout</a></li>
+            </ul>
+        </nav>
+
+        <div class="history-container">
+            <div class="history-card">
+
+                <div class="card-header">
+                    <i class="fa-solid fa-folder-open"></i>
+                   <span style="color: blue;">History Information</span>
                 </div>
-            </li>
-            <li><a href="dashboard.html"><i class="fa fa-home"></i> Dashboard</a></li>
-            <li><a href="editprofile.html"><i class="fa fa-pencil"></i> Edit Profile</a></li>
-            <li><a href="history.html" class="active"><i class="fa fa-history"></i> History</a></li>
-            <li><a href="reservation.html"><i class="fa fa-calendar"></i> Reservation</a></li>
-            <li><a href="leaderboard.html"><i class="fa fa-trophy"></i> Leaderboard</a></li>
-            <li><a href="mysummary.html"><i class="fa fa-chart-line"></i> My Summary</a></li>
-            <li><a href="labstatus.html"><i class="fa fa-desktop"></i> Lab Status</a></li>
-            <li>
-                <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()">
-                    <i class="fa-solid fa-moon" id="themeIcon"></i>
-                    <span id="themeLabel"></span>
-                </button>
-            </li>
-            <li><a href="javascript:void(0)" onclick="logout()" class="logout"><i class="fa fa-sign-out"></i> Logout</a></li>
-        </ul>
-    </nav>
 
-    <div class="history-container">
-        <div class="history-card">
-
-            <div class="card-header">
-                <i class="fa-solid fa-folder-open"></i>
-                <span>History Information</span>
-            </div>
-
-            <div class="table-header-actions">
-                <div class="entries-control">
-                    Show
-                    <select id="entryCount">
-                        <option value="10">10</option>
-                        <option value="25">25</option>
-                    </select> Entries per page
+                <div class="table-header-actions">
+                    <div class="entries-control">
+                        Show
+                        <select id="entryCount">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                        </select> Entries per page
+                    </div>
+                    <div class="search-container"><input type="text" id="tableSearch" placeholder="Search by Name or ID..."></div>
                 </div>
-                <div class="search-container"><input type="text" id="tableSearch" placeholder="Search by Name or ID..."></div>
-            </div>
 
-            <table class="styled-table">
-                <thead>
-                    <tr>
-                        <th data-col="idNumber">ID Number <span class="sort-icon" id="sort-idNumber"></span></th>
-                        <th data-col="displayName">Name <span class="sort-icon" id="sort-displayName"></span></th>
-                        <th data-col="purpose">Sit Purpose <span class="sort-icon" id="sort-purpose"></span></th>
-                        <th data-col="lab">Laboratory <span class="sort-icon" id="sort-lab"></span></th>
-                        <th data-col="displayIn">Login <span class="sort-icon" id="sort-displayIn"></span></th>
-                        <th data-col="displayOut">Logout <span class="sort-icon" id="sort-displayOut"></span></th>
-                        <th data-col="date">Date <span class="sort-icon" id="sort-date"></span></th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody id="historyData"></tbody>
-            </table>
+                <table class="styled-table">
+                    <thead>
+                        <tr>
+                           <th data-col="idNumber" style="color: blue;">ID Number <span class="sort-icon" id="sort-idNumber"></span></th>
+                           <th data-col="displayName" style="color: blue;">Name <span class="sort-icon" id="sort-displayName"></span></th>
+                           <th data-col="purpose" style="color: blue;">Sit Purpose <span class="sort-icon" id="sort-purpose"></span></th>
+                           <th data-col="lab" style="color: blue;">Laboratory <span class="sort-icon" id="sort-lab"></span></th>
+                           <th data-col="displayIn" style="color: blue;">Login <span class="sort-icon" id="sort-displayIn"></span></th>
+                           <th data-col="displayOut" style="color: blue;">Logout <span class="sort-icon" id="sort-displayOut"></span></th>
+                           <th data-col="date" style="color: blue;">Date <span class="sort-icon" id="sort-date"></span></th>
+                           <th style="color: blue;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historyData"></tbody>
+                </table>
 
-            <div class="table-footer">
-                <p id="entryInfo">Showing 0 to 0 of 0 entries</p>
-                <div class="pagination" id="pagination"></div>
+                <div class="table-footer">
+                    <p id="entryInfo">Showing 0 to 0 of 0 entries</p>
+                    <div class="pagination" id="pagination"></div>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- STAR RATING FEEDBACK MODAL -->
-    <div id="feedbackModal">
-        <div class="fb-modal-box">
-            <div class="fb-modal-header">
-                <span><i class="fa fa-star"></i> Submit Feedback</span>
-                <button onclick="closeFeedbackModal()">&times;</button>
-            </div>
-            <div class="fb-modal-body">
-                <center><span class="fb-label">Tell us about your experience or report an issue:</span></center>
-                <div class="star-picker" id="starPicker">
-                    <input type="radio" name="rating" id="star5" value="5">
-                    <label for="star5" title="5 stars">&#9733;</label>
-                    <input type="radio" name="rating" id="star4" value="4">
-                    <label for="star4" title="4 stars">&#9733;</label>
-                    <input type="radio" name="rating" id="star3" value="3">
-                    <label for="star3" title="3 stars">&#9733;</label>
-                    <input type="radio" name="rating" id="star2" value="2">
-                    <label for="star2" title="2 stars">&#9733;</label>
-                    <input type="radio" name="rating" id="star1" value="1">
-                    <label for="star1" title="1 star">&#9733;</label>
+        <!-- STAR RATING FEEDBACK MODAL -->
+        <div id="feedbackModal">
+            <div class="fb-modal-box">
+                <div class="fb-modal-header">
+                    <span><i class="fa fa-star"></i> Submit Feedback</span>
+                    <button onclick="closeFeedbackModal()">&times;</button>
                 </div>
-                <textarea id="fbMessage" placeholder="Type your message here..."></textarea>
-            </div>
-            <div class="fb-modal-footer">
-                <button class="fb-btn-cancel" onclick="closeFeedbackModal()">Cancel</button>
-                <button class="fb-btn-submit" onclick="submitFeedbackModal()">Submit Feedback</button>
+                <div class="fb-modal-body">
+                    <center><span class="fb-label">Tell us about your experience or report an issue:</span></center>
+                    <div class="star-picker" id="starPicker">
+                        <input type="radio" name="rating" id="star5" value="5">
+                        <label for="star5" title="5 stars">&#9733;</label>
+                        <input type="radio" name="rating" id="star4" value="4">
+                        <label for="star4" title="4 stars">&#9733;</label>
+                        <input type="radio" name="rating" id="star3" value="3">
+                        <label for="star3" title="3 stars">&#9733;</label>
+                        <input type="radio" name="rating" id="star2" value="2">
+                        <label for="star2" title="2 stars">&#9733;</label>
+                        <input type="radio" name="rating" id="star1" value="1">
+                        <label for="star1" title="1 star">&#9733;</label>
+                    </div>
+                    <textarea id="fbMessage" placeholder="Type your message here..."></textarea>
+                </div>
+                <div class="fb-modal-footer">
+                    <button class="fb-btn-cancel" onclick="closeFeedbackModal()">Cancel</button>
+                    <button class="fb-btn-submit" onclick="submitFeedbackModal()">Submit Feedback</button>
+                </div>
             </div>
         </div>
-    </div>
 
-<script>
-/* ══════════════════════════════════════
-   DARK / LIGHT MODE
-══════════════════════════════════════ */
-function applyTheme(theme) {
-    document.documentElement.setAttribute('data-theme', theme);
-    const icon  = document.getElementById('themeIcon');
-    const label = document.getElementById('themeLabel');
-    if (theme === 'dark') {
-        icon.className  = 'fa-solid fa-sun';
-    } else {
-        icon.className  = 'fa-solid fa-moon';
-    }
-}
- 
-function toggleTheme() {
-    const current = document.documentElement.getAttribute('data-theme');
-    const next    = current === 'dark' ? 'light' : 'dark';
-    localStorage.setItem('ccs_theme', next);
-    applyTheme(next);
- 
-    // Animate the icon on toggle
-    const icon = document.getElementById('themeIcon');
-    icon.style.transform = 'rotate(360deg)';
-    icon.style.transition = 'transform 0.4s ease';
-    setTimeout(() => { icon.style.transform = ''; icon.style.transition = ''; }, 400);
-}
- 
-// Load saved theme on page start
-(function() {
-    const saved = localStorage.getItem('ccs_theme') || 'light';
-    applyTheme(saved);
-})();
-
-let _announcements = [];
-
-function toggleNotifDropdown(e) {
-    e.preventDefault();
-    const d = document.getElementById('notifDropdown');
-    d.style.display = d.style.display === 'block' ? 'none' : 'block';
-}
-
-document.addEventListener('click', (e) => {
-    if (!e.target.closest('li:has(#notifDropdown)')) {
-        const d = document.getElementById('notifDropdown');
-        if (d) d.style.display = 'none';
-    }
-});
-
-function getReadIds() { return JSON.parse(localStorage.getItem('readIds') || '[]'); }
-function saveReadIds(ids) { localStorage.setItem('readIds', JSON.stringify(ids)); }
-
-function markAllRead() {
-    saveReadIds(_announcements.map(a => a.id));
-    renderNotifs();
-}
-
-function renderNotifs() {
-    const readIds = getReadIds();
-    const unread = _announcements.filter(a => !readIds.includes(a.id)).length;
-    const badge = document.getElementById('notifBadge');
-    badge.textContent = unread;
-    badge.style.display = unread > 0 ? 'flex' : 'none';
-
-    document.getElementById('notifList').innerHTML = _announcements.length
-        ? _announcements.map(a => `
-            <div onclick="markOneRead(${a.id})" style="padding:12px 14px; border-bottom:1px solid #eee;
-                cursor:pointer; background:${!readIds.includes(a.id) ? '#eaf3fb' : 'white'}">
-                <div style="font-size:11px; color:#888;">${a.author} | ${a.date}</div>
-                <div style="font-size:13px; color:#222; margin-top:3px;">${a.content}</div>
-            </div>`).join('')
-        : '<p style="text-align:center;color:#aaa;padding:20px;font-size:13px;">No announcements yet.</p>';
-}
-
-function markOneRead(id) {
-    const ids = getReadIds();
-    if (!ids.includes(id)) { ids.push(id); saveReadIds(ids); renderNotifs(); }
-}
-
-async function pollAnnouncements() {
-    try {
-        const res = await fetch('http://localhost:3000/announcements');
-        _announcements = await res.json();
-        renderNotifs();
-    } catch(e) {}
-}
-
-pollAnnouncements();
-setInterval(pollAnnouncements, 30000);
-
-let _resNotifs = [];
-
-async function pollResNotifs() {
-    const idNumber = localStorage.getItem('loggedInId');
-    if (!idNumber) return;
-    try {
-        const res = await fetch(`http://localhost:3000/notifications/${idNumber}`);
-        _resNotifs = await res.json();
-        renderCombinedNotifs();
-    } catch(e) {}
-}
-
-function renderCombinedNotifs() {
-    const readIds    = getReadIds();
-    const unreadAnn  = _announcements.filter(a => !readIds.includes(a.id)).length;
-    const unreadRes  = _resNotifs.filter(n => n.isRead === 0).length;
-    const totalUnread = unreadAnn + unreadRes;
-
-    const badge = document.getElementById('notifBadge');
-    badge.textContent = totalUnread;
-    badge.style.display = totalUnread > 0 ? 'flex' : 'none';
-
-    let html = '';
-
-    _resNotifs.forEach(n => {
-        const isAccepted = n.message.startsWith('✅');
-        html += `
-            <div onclick="markResNotifRead(${n.id})" style="padding:12px 14px;border-bottom:1px solid #eee;cursor:pointer;
-                background:${n.isRead ? 'white' : (isAccepted ? '#eaf7ee' : '#fdf0f0')};">
-                <div style="font-size:14px;color:#888;">Reservation Update | ${n.createdAt || ''}</div>
-                <div style="font-size:14px;color:${n.isRead ? '#888' : '#222'};margin-top:3px;font-family:'Sora',sans-serif;">${n.message}</div>
-            </div>`;
-    });
-
-    _announcements.forEach(a => {
-        html += `
-            <div onclick="markOneRead(${a.id})" style="padding:12px 14px;border-bottom:1px solid #eee;cursor:pointer;
-                background:${!readIds.includes(a.id) ? '#eaf3fb' : 'white'}">
-                <div style="font-size:14px;color:#888;">${a.author} | ${a.date}</div>
-                <div style="font-size:14px;color:#222;margin-top:3px;font-family:'Sora',sans-serif;">${a.content}</div>
-            </div>`;
-    });
-
-    document.getElementById('notifList').innerHTML = html ||
-        '<p style="text-align:center;color:#aaa;padding:20px;font-size:13px;">No notifications yet.</p>';
-}
-
-async function markResNotifRead(id) {
-    try {
-        await fetch(`http://localhost:3000/notifications/read/${id}`, { method: 'POST' });
-        const n = _resNotifs.find(x => x.id === id);
-        if (n) n.isRead = 1;
-        renderCombinedNotifs();
-    } catch(e) {}
-}
-
-// Override markAllRead to also clear reservation notifs
-const _origMarkAllRead = markAllRead;
-window.markAllRead = function() {
-    _origMarkAllRead();
-    const idNumber = localStorage.getItem('loggedInId');
-    if (idNumber) {
-        fetch(`http://localhost:3000/notifications/read-all/${idNumber}`, { method: 'POST' })
-            .then(() => { _resNotifs.forEach(n => n.isRead = 1); renderCombinedNotifs(); })
-            .catch(() => {});
-    }
-};
-
-// Override renderNotifs so announcements also trigger a combined re-render
-const _origRenderNotifs = renderNotifs;
-window.renderNotifs = function() {
-    _origRenderNotifs();
-    renderCombinedNotifs();
-};
-
-// SweetAlert popup when a new accept/deny arrives
-let _lastResNotifCount = 0;
-async function checkForNewResNotifs() {
-    const idNumber = localStorage.getItem('loggedInId');
-    if (!idNumber) return;
-    try {
-        const res    = await fetch(`http://localhost:3000/notifications/${idNumber}`);
-        const notifs = await res.json();
-        const unread = notifs.filter(n => n.isRead === 0);
-        if (unread.length > _lastResNotifCount && _lastResNotifCount !== -1) {
-            const latest     = unread[0];
-            const isAccepted = latest.message.startsWith('✅');
-            Swal.fire({
-                icon: isAccepted ? 'success' : 'error',
-                title: isAccepted ? 'Reservation Accepted!' : 'Reservation Denied',
-                text: latest.message.replace(/^[✅❌]\s*/, ''),
-                confirmButtonColor: isAccepted ? '#28a745' : '#dc3545',
-                confirmButtonText: 'OK'
-            });
-        }
-        _lastResNotifCount = unread.length;
-        _resNotifs = notifs;
-        renderCombinedNotifs();
-    } catch(e) {}
-}
-
-pollResNotifs();
-setTimeout(async () => {
-    const idNumber = localStorage.getItem('loggedInId');
-    if (!idNumber) return;
-    try {
-        const res    = await fetch(`http://localhost:3000/notifications/${idNumber}`);
-        const notifs = await res.json();
-        _lastResNotifCount = notifs.filter(n => n.isRead === 0).length;
-    } catch(e) { _lastResNotifCount = 0; }
-}, 500);
-setInterval(checkForNewResNotifs, 15000);
-
-
-    let allData      = [];
-    let filteredData = [];
-    let currentPage  = 1;
-    let perPage      = 10;
-    let sortCol      = null;
-    let sortDir      = "asc";
-
-    function formatTime(timeStr) {
-        if (!timeStr || timeStr === "null" || timeStr === "---") return "---";
-        if (timeStr.includes("AM") || timeStr.includes("PM")) return timeStr; 
-
-        try {
-            let [hours, minutes] = timeStr.split(':');
-            hours = parseInt(hours);
-            const ampm = hours >= 12 ? 'PM' : 'AM';
-            hours = hours % 12;
-            hours = hours ? hours : 12; 
-            return `${hours}:${minutes.substring(0,2)} ${ampm}`;
-        } catch (e) {
-            return timeStr;
-        }
-    }
-
-    async function loadData() {
-        const idNumber = localStorage.getItem("loggedInId");
-        // Get name from localStorage. If it's missing, defaults to "Student"
-        const sessionName = localStorage.getItem("userName") || "Student";
-
-        if (!idNumber) { 
-            window.location.href = "index.html"; 
-            return; 
-        }
-
-        try {
-            const res = await fetch(`http://localhost:3000/history/${idNumber}`);
-            let rawData = await res.json();
-            
-            if (!Array.isArray(rawData)) {
-                allData = [];
-            } else {
-                allData = rawData.map(row => {
-                    return {
-                        ...row,
-                        // Fix the name using the session data
-                        displayName: sessionName,
-                        // Ensure Login and Logout are formatted to AM/PM
-                        displayIn: formatTime(row.timeIn || row.login || "---"),
-                        displayOut: (row.timeOut && row.timeOut !== "null") ? formatTime(row.timeOut) : "None"
-                    };
-                });
-            }
-        } catch(e) {
-            allData = [];
-            console.error("Failed to load history:", e);
-        }
-
-        filteredData = [...allData];
-        updateSortIcons();
-        render();
-    }
-
-    function render() {
-        const start = (currentPage - 1) * perPage;
-        const end   = Math.min(start + perPage, filteredData.length);
-        const slice = filteredData.slice(start, end);
-        const tbody = document.getElementById("historyData");
-        const total = filteredData.length;
-
-        if (slice.length === 0) {
-            tbody.innerHTML = `<tr class="empty-row"><td colspan="8">No records found.</td></tr>`;
-            document.getElementById("entryInfo").textContent = "Showing 0 to 0 of 0 entries";
+    <script>
+    /* ══════════════════════════════════════
+    DARK / LIGHT MODE
+    ══════════════════════════════════════ */
+    function applyTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        const icon  = document.getElementById('themeIcon');
+        const label = document.getElementById('themeLabel');
+        if (theme === 'dark') {
+            icon.className  = 'fa-solid fa-sun';
         } else {
-            tbody.innerHTML = slice.map(row => {
-
-                const fullName = (row.firstName && row.lastName) 
-                    ? `${row.firstName} ${row.lastName}` 
-                    : 'Student';
-
-                return `
-                    <tr>
-                        <td><b style="font-family: 'Sora', sans-serif;">${row.idNumber || 'N/A'}</b></td>
-                        <td>${fullName}</td> 
-                        <td>${row.purpose || 'N/A'}</td>
-                        <td>${row.lab || 'N/A'}</td>
-                        <td>${row.displayIn || row.timeIn}</td> 
-                        <td>${row.displayOut || row.timeOut || 'None'}</td>
-                        <td>${row.date || 'N/A'}</td>
-                        <td><button class="feedback-btn" onclick="openFeedbackPopup('${row.idNumber}', '${row.lab}')">Feedback</button></td>
-                    </tr>
-                `;
-            }).join("");
-            
-            document.getElementById("entryInfo").textContent =
-                `Showing ${start + 1} to ${end} of ${total} ${total === 1 ? "entry" : "entries"}`;
+            icon.className  = 'fa-solid fa-moon';
         }
+    }
+    
+    function toggleTheme() {
+        const current = document.documentElement.getAttribute('data-theme');
+        const next    = current === 'dark' ? 'light' : 'dark';
+        localStorage.setItem('ccs_theme', next);
+        applyTheme(next);
+    
+        // Animate the icon on toggle
+        const icon = document.getElementById('themeIcon');
+        icon.style.transform = 'rotate(360deg)';
+        icon.style.transition = 'transform 0.4s ease';
+        setTimeout(() => { icon.style.transform = ''; icon.style.transition = ''; }, 400);
+    }
+    
+    // Load saved theme on page start
+    (function() {
+        const saved = localStorage.getItem('ccs_theme') || 'light';
+        applyTheme(saved);
+    })();
 
-        renderPagination();
+    let _announcements = [];
+
+    function toggleNotifDropdown(e) {
+        e.preventDefault();
+        const d = document.getElementById('notifDropdown');
+        d.style.display = d.style.display === 'block' ? 'none' : 'block';
     }
 
-    let _fbIdNumber = '';
-    let _fbLab = '';
-
-    function openFeedbackPopup(idNumber, lab) {
-        _fbIdNumber = idNumber;
-        _fbLab = lab;
-        document.querySelectorAll('#starPicker input[type="radio"]').forEach(r => r.checked = false);
-        document.getElementById('fbMessage').value = '';
-        document.querySelector('.fb-modal-header span').innerHTML =
-            `<i class="fa fa-star"></i> Submit Feedback for ${lab}`;
-        document.getElementById('feedbackModal').classList.add('open');
-    }
-
-    function closeFeedbackModal() {
-        document.getElementById('feedbackModal').classList.remove('open');
-    }
-
-    document.getElementById('feedbackModal').addEventListener('click', function(e) {
-        if (e.target === this) closeFeedbackModal();
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('li:has(#notifDropdown)')) {
+            const d = document.getElementById('notifDropdown');
+            if (d) d.style.display = 'none';
+        }
     });
 
-    async function submitFeedbackModal() {
-        const ratingEl = document.querySelector('#starPicker input[type="radio"]:checked');
-        const message  = document.getElementById('fbMessage').value.trim();
+    function getReadIds() { return JSON.parse(localStorage.getItem('readIds') || '[]'); }
+    function saveReadIds(ids) { localStorage.setItem('readIds', JSON.stringify(ids)); }
 
-        if (!ratingEl) {
-            Swal.fire({ icon: 'warning', title: 'Rating Required', text: 'Please select a star rating before submitting.', confirmButtonColor: '#2c3e70' });
-            return;
-        }
-        if (!message) {
-            Swal.fire({ icon: 'warning', title: 'Message Required', text: 'Please write a message before submitting.', confirmButtonColor: '#2c3e70' });
-            return;
-        }
-
-        closeFeedbackModal();
-
-        try {
-            const response = await fetch("http://localhost:3000/api/feedback", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    idNumber: _fbIdNumber,
-                    lab:      _fbLab,
-                    rating:   parseInt(ratingEl.value),
-                    message:  message
-                })
-            });
-
-            if (response.ok) {
-                Swal.fire({ icon: 'success', title: 'Thank You!', text: 'Your feedback has been sent to the admin.', confirmButtonColor: '#28a745' });
-            } else {
-                throw new Error("Failed to send");
-            }
-        } catch (err) {
-            console.error("Feedback error:", err);
-            Swal.fire('Error', 'Could not send feedback. Is the server running?', 'error');
-        }
+    function markAllRead() {
+        saveReadIds(_announcements.map(a => a.id));
+        renderNotifs();
     }
 
-    function renderPagination() {
-        const totalPages = Math.ceil(filteredData.length / perPage) || 1;
-        const pg = document.getElementById("pagination");
-        let html = "";
+    function renderNotifs() {
+        const readIds = getReadIds();
+        const unread = _announcements.filter(a => !readIds.includes(a.id)).length;
+        const badge = document.getElementById('notifBadge');
+        badge.textContent = unread;
+        badge.style.display = unread > 0 ? 'flex' : 'none';
 
-        html += `<button onclick="goPage(1)" ${currentPage===1?"disabled":""}>«</button>`;
-        html += `<button onclick="goPage(${currentPage-1})" ${currentPage===1?"disabled":""}>‹</button>`;
+        document.getElementById('notifList').innerHTML = _announcements.length
+            ? _announcements.map(a => `
+                <div onclick="markOneRead(${a.id})" style="padding:12px 14px; border-bottom:1px solid #eee;
+                    cursor:pointer; background:${!readIds.includes(a.id) ? '#eaf3fb' : 'white'}">
+                    <div style="font-size:11px; color:#888;">${a.author} | ${a.date}</div>
+                    <div style="font-size:13px; color:#222; margin-top:3px;">${a.content}</div>
+                </div>`).join('')
+            : '<p style="text-align:center;color:#aaa;padding:20px;font-size:13px;">No announcements yet.</p>';
+    }
 
-        pageRange(currentPage, totalPages).forEach(p => {
-            html += p === "…"
-                ? `<button disabled>…</button>`
-                : `<button class="${p===currentPage?"active":""}" onclick="goPage(${p})">${p}</button>`;
+    function markOneRead(id) {
+        const ids = getReadIds();
+        if (!ids.includes(id)) { ids.push(id); saveReadIds(ids); renderNotifs(); }
+    }
+
+    async function pollAnnouncements() {
+        try {
+            const res = await fetch('http://localhost:3000/announcements');
+            _announcements = await res.json();
+            renderNotifs();
+        } catch(e) {}
+    }
+
+    pollAnnouncements();
+    setInterval(pollAnnouncements, 30000);
+
+    let _resNotifs = [];
+
+    async function pollResNotifs() {
+        const idNumber = localStorage.getItem('loggedInId');
+        if (!idNumber) return;
+        try {
+            const res = await fetch(`http://localhost:3000/notifications/${idNumber}`);
+            _resNotifs = await res.json();
+            renderCombinedNotifs();
+        } catch(e) {}
+    }
+
+    function renderCombinedNotifs() {
+        const readIds    = getReadIds();
+        const unreadAnn  = _announcements.filter(a => !readIds.includes(a.id)).length;
+        const unreadRes  = _resNotifs.filter(n => n.isRead === 0).length;
+        const totalUnread = unreadAnn + unreadRes;
+
+        const badge = document.getElementById('notifBadge');
+        badge.textContent = totalUnread;
+        badge.style.display = totalUnread > 0 ? 'flex' : 'none';
+
+        let html = '';
+
+        _resNotifs.forEach(n => {
+            const isAccepted = n.message.startsWith('✅');
+            html += `
+                <div onclick="markResNotifRead(${n.id})" style="padding:12px 14px;border-bottom:1px solid #eee;cursor:pointer;
+                    background:${n.isRead ? 'white' : (isAccepted ? '#eaf7ee' : '#fdf0f0')};">
+                    <div style="font-size:14px;color:#888;">Reservation Update | ${n.createdAt || ''}</div>
+                    <div style="font-size:14px;color:${n.isRead ? '#888' : '#222'};margin-top:3px;font-family:'Sora',sans-serif;">${n.message}</div>
+                </div>`;
         });
 
-        html += `<button onclick="goPage(${currentPage+1})" ${currentPage===totalPages?"disabled":""}>›</button>`;
-        html += `<button onclick="goPage(${totalPages})" ${currentPage===totalPages?"disabled":""}>»</button>`;
-        pg.innerHTML = html;
+        _announcements.forEach(a => {
+            html += `
+                <div onclick="markOneRead(${a.id})" style="padding:12px 14px;border-bottom:1px solid #eee;cursor:pointer;
+                    background:${!readIds.includes(a.id) ? '#eaf3fb' : 'white'}">
+                    <div style="font-size:14px;color:#888;">${a.author} | ${a.date}</div>
+                    <div style="font-size:14px;color:#222;margin-top:3px;font-family:'Sora',sans-serif;">${a.content}</div>
+                </div>`;
+        });
+
+        document.getElementById('notifList').innerHTML = html ||
+            '<p style="text-align:center;color:#aaa;padding:20px;font-size:13px;">No notifications yet.</p>';
     }
 
-    function pageRange(cur, total) {
-        if (total <= 7) return Array.from({length: total}, (_, i) => i + 1);
-        if (cur <= 4)       return [1,2,3,4,5,"…",total];
-        if (cur >= total-3) return [1,"…",total-4,total-3,total-2,total-1,total];
-        return [1,"…",cur-1,cur,cur+1,"…",total];
+    async function markResNotifRead(id) {
+        try {
+            await fetch(`http://localhost:3000/notifications/read/${id}`, { method: 'POST' });
+            const n = _resNotifs.find(x => x.id === id);
+            if (n) n.isRead = 1;
+            renderCombinedNotifs();
+        } catch(e) {}
     }
 
-    function goPage(p) {
-        const totalPages = Math.ceil(filteredData.length / perPage) || 1;
-        currentPage = Math.max(1, Math.min(p, totalPages));
-        render();
+    // Override markAllRead to also clear reservation notifs
+    const _origMarkAllRead = markAllRead;
+    window.markAllRead = function() {
+        _origMarkAllRead();
+        const idNumber = localStorage.getItem('loggedInId');
+        if (idNumber) {
+            fetch(`http://localhost:3000/notifications/read-all/${idNumber}`, { method: 'POST' })
+                .then(() => { _resNotifs.forEach(n => n.isRead = 1); renderCombinedNotifs(); })
+                .catch(() => {});
+        }
+    };
+
+    // Override renderNotifs so announcements also trigger a combined re-render
+    const _origRenderNotifs = renderNotifs;
+    window.renderNotifs = function() {
+        _origRenderNotifs();
+        renderCombinedNotifs();
+    };
+
+    // SweetAlert popup when a new accept/deny arrives
+    let _lastResNotifCount = 0;
+    async function checkForNewResNotifs() {
+        const idNumber = localStorage.getItem('loggedInId');
+        if (!idNumber) return;
+        try {
+            const res    = await fetch(`http://localhost:3000/notifications/${idNumber}`);
+            const notifs = await res.json();
+            const unread = notifs.filter(n => n.isRead === 0);
+            if (unread.length > _lastResNotifCount && _lastResNotifCount !== -1) {
+                const latest     = unread[0];
+                const isAccepted = latest.message.startsWith('✅');
+                Swal.fire({
+                    icon: isAccepted ? 'success' : 'error',
+                    title: isAccepted ? 'Reservation Accepted!' : 'Reservation Denied',
+                    text: latest.message.replace(/^[✅❌]\s*/, ''),
+                    confirmButtonColor: isAccepted ? '#28a745' : '#dc3545',
+                    confirmButtonText: 'OK'
+                });
+            }
+            _lastResNotifCount = unread.length;
+            _resNotifs = notifs;
+            renderCombinedNotifs();
+        } catch(e) {}
     }
 
-    document.getElementById("tableSearch").addEventListener("input", function() {
-        const q = this.value.trim().toLowerCase();
-        filteredData = allData.filter(row =>
-            Object.values(row).some(v => String(v).toLowerCase().includes(q))
-        );
-        applySort();
-        currentPage = 1;
-        render();
-    });
+    pollResNotifs();
+    setTimeout(async () => {
+        const idNumber = localStorage.getItem('loggedInId');
+        if (!idNumber) return;
+        try {
+            const res    = await fetch(`http://localhost:3000/notifications/${idNumber}`);
+            const notifs = await res.json();
+            _lastResNotifCount = notifs.filter(n => n.isRead === 0).length;
+        } catch(e) { _lastResNotifCount = 0; }
+    }, 500);
+    setInterval(checkForNewResNotifs, 15000);
 
-    document.getElementById("entryCount").addEventListener("change", function() {
-        perPage = parseInt(this.value);
-        currentPage = 1;
-        render();
-    });
 
-    document.querySelectorAll("th[data-col]").forEach(th => {
-        th.addEventListener("click", function() {
-            const col = this.dataset.col;
-            sortDir = (sortCol === col && sortDir === "asc") ? "desc" : "asc";
-            sortCol = col;
-            applySort();
+        let allData      = [];
+        let filteredData = [];
+        let currentPage  = 1;
+        let perPage      = 10;
+        let sortCol      = null;
+        let sortDir      = "asc";
+
+        function formatTime(timeStr) {
+            if (!timeStr || timeStr === "null" || timeStr === "---") return "---";
+            if (timeStr.includes("AM") || timeStr.includes("PM")) return timeStr; 
+
+            try {
+                let [hours, minutes] = timeStr.split(':');
+                hours = parseInt(hours);
+                const ampm = hours >= 12 ? 'PM' : 'AM';
+                hours = hours % 12;
+                hours = hours ? hours : 12; 
+                return `${hours}:${minutes.substring(0,2)} ${ampm}`;
+            } catch (e) {
+                return timeStr;
+            }
+        }
+
+        async function loadData() {
+            const idNumber = localStorage.getItem("loggedInId");
+            // Get name from localStorage. If it's missing, defaults to "Student"
+            const sessionName = localStorage.getItem("userName") || "Student";
+
+            if (!idNumber) { 
+                window.location.href = "index.html"; 
+                return; 
+            }
+
+            try {
+                const res = await fetch(`http://localhost:3000/history/${idNumber}`);
+                let rawData = await res.json();
+                
+                if (!Array.isArray(rawData)) {
+                    allData = [];
+                } else {
+                    allData = rawData.map(row => {
+                        return {
+                            ...row,
+                            // Fix the name using the session data
+                            displayName: sessionName,
+                            // Ensure Login and Logout are formatted to AM/PM
+                            displayIn: formatTime(row.timeIn || row.login || "---"),
+                            displayOut: (row.timeOut && row.timeOut !== "null") ? formatTime(row.timeOut) : "None"
+                        };
+                    });
+                }
+            } catch(e) {
+                allData = [];
+                console.error("Failed to load history:", e);
+            }
+
+            filteredData = [...allData];
             updateSortIcons();
             render();
-        });
-    });
+        }
 
-    function applySort() {
-        if (!sortCol) return;
-        filteredData.sort((a, b) => {
-            let va = String(a[sortCol] || "").toLowerCase();
-            let vb = String(b[sortCol] || "").toLowerCase();
-            return sortDir === "asc"
-                ? va.localeCompare(vb, undefined, {numeric: true})
-                : vb.localeCompare(va, undefined, {numeric: true});
-        });
-    }
+        function render() {
+            const start = (currentPage - 1) * perPage;
+            const end   = Math.min(start + perPage, filteredData.length);
+            const slice = filteredData.slice(start, end);
+            const tbody = document.getElementById("historyData");
+            const total = filteredData.length;
 
-    function updateSortIcons() {
-        ["idNumber","displayName","purpose","lab","displayIn","displayOut","date"].forEach(c => {
-            const el = document.getElementById(`sort-${c}`);
-            if (!el) return;
-            el.className = "sort-icon" + (sortCol === c ? " " + sortDir : "");
-        });
-    }
+            if (slice.length === 0) {
+                tbody.innerHTML = `<tr class="empty-row"><td colspan="8">No records found.</td></tr>`;
+                document.getElementById("entryInfo").textContent = "Showing 0 to 0 of 0 entries";
+            } else {
+                tbody.innerHTML = slice.map(row => {
 
-    loadData();
-    
-    async function logout() {
-    const studentId = localStorage.getItem('loggedInId');
-    
-    const { isConfirmed } = await Swal.fire({
-        title: 'Logout?',
-        text: "This will end your current lab session and log you out.",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#0056b3',
-        confirmButtonText: 'Yes, Logout!'
-    });
+                    const fullName = (row.firstName && row.lastName) 
+                        ? `${row.firstName} ${row.lastName}` 
+                        : 'Student';
 
-    if (isConfirmed) {
-        try {
-            if (studentId) {
-                await fetch("http://localhost:3000/record-final-logout", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ idNumber: studentId })
-                });
+                    return `
+                        <tr>
+                            <td><b style="font-family: 'Sora', sans-serif;">${row.idNumber || 'N/A'}</b></td>
+                            <td>${fullName}</td> 
+                            <td>${row.purpose || 'N/A'}</td>
+                            <td>${row.lab || 'N/A'}</td>
+                            <td>${row.displayIn || row.timeIn}</td> 
+                            <td>${row.displayOut || row.timeOut || 'None'}</td>
+                            <td>${row.date || 'N/A'}</td>
+                            <td><button class="feedback-btn" onclick="openFeedbackPopup('${row.idNumber}', '${row.lab}')">Feedback</button></td>
+                        </tr>
+                    `;
+                }).join("");
+                
+                document.getElementById("entryInfo").textContent =
+                    `Showing ${start + 1} to ${end} of ${total} ${total === 1 ? "entry" : "entries"}`;
             }
 
-            localStorage.removeItem('loggedInId');
-            localStorage.removeItem('sessionExpiry');
-            sessionStorage.clear();
+            renderPagination();
+        }
 
-            await Swal.fire({
-                icon: 'success',
-                title: 'Logged Out',
-                text: 'Your session has been closed.',
-                timer: 1500,
-                showConfirmButton: false
+        let _fbIdNumber = '';
+        let _fbLab = '';
+
+        function openFeedbackPopup(idNumber, lab) {
+            _fbIdNumber = idNumber;
+            _fbLab = lab;
+            document.querySelectorAll('#starPicker input[type="radio"]').forEach(r => r.checked = false);
+            document.getElementById('fbMessage').value = '';
+            document.querySelector('.fb-modal-header span').innerHTML =
+                `<i class="fa fa-star"></i> Submit Feedback for ${lab}`;
+            document.getElementById('feedbackModal').classList.add('open');
+        }
+
+        function closeFeedbackModal() {
+            document.getElementById('feedbackModal').classList.remove('open');
+        }
+
+        document.getElementById('feedbackModal').addEventListener('click', function(e) {
+            if (e.target === this) closeFeedbackModal();
+        });
+
+        async function submitFeedbackModal() {
+            const ratingEl = document.querySelector('#starPicker input[type="radio"]:checked');
+            const message  = document.getElementById('fbMessage').value.trim();
+
+            if (!ratingEl) {
+                Swal.fire({ icon: 'warning', title: 'Rating Required', text: 'Please select a star rating before submitting.', confirmButtonColor: '#2c3e70' });
+                return;
+            }
+            if (!message) {
+                Swal.fire({ icon: 'warning', title: 'Message Required', text: 'Please write a message before submitting.', confirmButtonColor: '#2c3e70' });
+                return;
+            }
+
+            closeFeedbackModal();
+
+            try {
+                const response = await fetch("http://localhost:3000/api/feedback", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        idNumber: _fbIdNumber,
+                        lab:      _fbLab,
+                        rating:   parseInt(ratingEl.value),
+                        message:  message
+                    })
+                });
+
+                if (response.ok) {
+                    Swal.fire({ icon: 'success', title: 'Thank You!', text: 'Your feedback has been sent to the admin.', confirmButtonColor: '#28a745' });
+                } else {
+                    throw new Error("Failed to send");
+                }
+            } catch (err) {
+                console.error("Feedback error:", err);
+                Swal.fire('Error', 'Could not send feedback. Is the server running?', 'error');
+            }
+        }
+
+        function renderPagination() {
+            const totalPages = Math.ceil(filteredData.length / perPage) || 1;
+            const pg = document.getElementById("pagination");
+            let html = "";
+
+            html += `<button onclick="goPage(1)" ${currentPage===1?"disabled":""}>«</button>`;
+            html += `<button onclick="goPage(${currentPage-1})" ${currentPage===1?"disabled":""}>‹</button>`;
+
+            pageRange(currentPage, totalPages).forEach(p => {
+                html += p === "…"
+                    ? `<button disabled>…</button>`
+                    : `<button class="${p===currentPage?"active":""}" onclick="goPage(${p})">${p}</button>`;
             });
-            window.location.href = 'index.html';
-        } catch (err) {
-            console.error("Logout error:", err);
-            localStorage.removeItem('loggedInId');
-            window.location.href = 'index.html';
+
+            html += `<button onclick="goPage(${currentPage+1})" ${currentPage===totalPages?"disabled":""}>›</button>`;
+            html += `<button onclick="goPage(${totalPages})" ${currentPage===totalPages?"disabled":""}>»</button>`;
+            pg.innerHTML = html;
+        }
+
+        function pageRange(cur, total) {
+            if (total <= 7) return Array.from({length: total}, (_, i) => i + 1);
+            if (cur <= 4)       return [1,2,3,4,5,"…",total];
+            if (cur >= total-3) return [1,"…",total-4,total-3,total-2,total-1,total];
+            return [1,"…",cur-1,cur,cur+1,"…",total];
+        }
+
+        function goPage(p) {
+            const totalPages = Math.ceil(filteredData.length / perPage) || 1;
+            currentPage = Math.max(1, Math.min(p, totalPages));
+            render();
+        }
+
+        document.getElementById("tableSearch").addEventListener("input", function() {
+            const q = this.value.trim().toLowerCase();
+            filteredData = allData.filter(row =>
+                Object.values(row).some(v => String(v).toLowerCase().includes(q))
+            );
+            applySort();
+            currentPage = 1;
+            render();
+        });
+
+        document.getElementById("entryCount").addEventListener("change", function() {
+            perPage = parseInt(this.value);
+            currentPage = 1;
+            render();
+        });
+
+        document.querySelectorAll("th[data-col]").forEach(th => {
+            th.addEventListener("click", function() {
+                const col = this.dataset.col;
+                sortDir = (sortCol === col && sortDir === "asc") ? "desc" : "asc";
+                sortCol = col;
+                applySort();
+                updateSortIcons();
+                render();
+            });
+        });
+
+        function applySort() {
+            if (!sortCol) return;
+            filteredData.sort((a, b) => {
+                let va = String(a[sortCol] || "").toLowerCase();
+                let vb = String(b[sortCol] || "").toLowerCase();
+                return sortDir === "asc"
+                    ? va.localeCompare(vb, undefined, {numeric: true})
+                    : vb.localeCompare(va, undefined, {numeric: true});
+            });
+        }
+
+        function updateSortIcons() {
+            ["idNumber","displayName","purpose","lab","displayIn","displayOut","date"].forEach(c => {
+                const el = document.getElementById(`sort-${c}`);
+                if (!el) return;
+                el.className = "sort-icon" + (sortCol === c ? " " + sortDir : "");
+            });
+        }
+
+        loadData();
+        
+        async function logout() {
+        const studentId = localStorage.getItem('loggedInId');
+        
+        const { isConfirmed } = await Swal.fire({
+            title: 'Logout?',
+            text: "This will end your current lab session and log you out.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#0056b3',
+            confirmButtonText: 'Yes, Logout!'
+        });
+
+        if (isConfirmed) {
+            try {
+                if (studentId) {
+                    await fetch("http://localhost:3000/record-final-logout", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ idNumber: studentId })
+                    });
+                }
+
+                localStorage.removeItem('loggedInId');
+                localStorage.removeItem('sessionExpiry');
+                sessionStorage.clear();
+
+                await Swal.fire({
+                    icon: 'success',
+                    title: 'Logged Out',
+                    text: 'Your session has been closed.',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+                window.location.href = 'index.html';
+            } catch (err) {
+                console.error("Logout error:", err);
+                localStorage.removeItem('loggedInId');
+                window.location.href = 'index.html';
+            }
         }
     }
-}
-</script>
-</body>
-</html>
+    </script>
+    </body>
+    </html>

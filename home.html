@@ -61,7 +61,7 @@
         /* ══ LEFT PANEL — Leaderboard (LIGHT) ══ */
         .leaderboard-panel {
             width: 55%;
-            background: #ffffff;
+            background: white;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -452,7 +452,7 @@
 <body>
 
     <nav class="navbar">
-        <div class="logo-text"><i class="fa fa-desktop"></i> College of Computer Studies Sit-in Monitoring System</div>
+        <div class="logo-text" style="color: blue;"><i class="fa fa-desktop"></i> College of Computer Studies Sit-in Monitoring System</div>
         <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()">
             <i class="fa-solid fa-moon" id="themeIcon"></i>
         </button>
@@ -463,13 +463,13 @@
         <!-- LEFT: LEADERBOARD -->
         <div class="leaderboard-panel">
             <img src="images/leaderboard.png" alt="CCS Logo" class="lb-logo" onerror="this.style.display='none'">
-            <h2 class="lb-title">🏆Leaderboard</h2>
+            <h2 class="lb-title" style="color: blue;">Leaderboard</h2>
             <p class="lb-subtitle">Top Sit-in Students this period</p>
 
             <div class="lb-filters">
-                <button class="lb-filter-btn active" style="font-family: 'Sora', sans-serif;" onclick="switchFilter(this, 'overall')">Overall</button>
-                <button class="lb-filter-btn" style="font-family: 'Sora', sans-serif;" onclick="switchFilter(this, 'week')">This Week</button>
-                <button class="lb-filter-btn" style="font-family: 'Sora', sans-serif;" onclick="switchFilter(this, 'today')">Today</button>
+                <button class="lb-filter-btn active" style="font-family: 'Sora', sans-serif; color: blue;" onclick="switchFilter(this, 'overall')">Overall</button>
+                <button class="lb-filter-btn" style="font-family: 'Sora', sans-serif; color: blue;" onclick="switchFilter(this, 'week')">This Week</button>
+                <button class="lb-filter-btn" style="font-family: 'Sora', sans-serif; color: blue;" onclick="switchFilter(this, 'today')">Today</button>
             </div>
 
             <div class="podium-wrap" id="podiumWrap">
@@ -482,9 +482,9 @@
         <!-- RIGHT: WELCOME -->
         <div class="welcome-panel">
             <img src="images/ccs.png" alt="CCS Logo" class="large-logo">
-            <h1 class="welcome-text">Welcome to the CCS Sit-in Monitoring System</h1>
+           <h1 class="welcome-text" style="color: blue;">Welcome to the CCS Sit-in Monitoring System</h1>
             <p class="sub-text">Managing student laboratory sessions with efficiency and security.</p>
-            <a href="index.html" class="btn-start">Get Started <i class="fa fa-arrow-right"></i></a>
+            <a href="index.html" class="btn-start" style="background-color: blue; color: white;">Get Started <i class="fa fa-arrow-right"></i></a>
         </div>
 
     </div>

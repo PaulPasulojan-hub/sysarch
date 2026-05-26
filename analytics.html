@@ -474,7 +474,7 @@
 
 <!-- ── NAVBAR ── -->
 <nav class="navbar">
-    <div class="logo-text"><i class="fa-solid fa-user-shield"></i> College of Computer Studies Admin</div>
+    <div class="logo-text" style="color: blue;"><i class="fa-solid fa-user-shield"></i> College of Computer Studies Admin</div>
     <ul class="nav-links">
         <li><a href="admindashboard.html"><i class="fa fa-home"></i> Home</a></li>
         <li><a href="javascript:void(0)" onclick="openUnifiedModal()"><i class="fa fa-search"></i> Search</a></li>
@@ -553,28 +553,28 @@
 <!-- ── PAGE ── -->
 <div class="page-wrapper">
     
-    <div class="page-title"><i class="fa fa-line-chart"></i> Analytics & Reports</div>
+   <div class="page-title" style="color: blue;"><i class="fa fa-line-chart"></i> Analytics & Reports</div>
 
     <!-- STAT CARDS -->
     <div class="stats-row">
         <div class="stat-card blue">
             <div class="stat-icon icon-blue"><i class="fa-solid fa-user-graduate"></i></div>
             <div>
-                <div class="stat-label">Registered Students</div>
+               <div class="stat-label" style="color: blue;">Registered Students</div>
                 <div class="stat-value" id="statRegistered">—</div>
             </div>
         </div>
         <div class="stat-card amber">
             <div class="stat-icon icon-amber"><i class="fa-solid fa-laptop"></i></div>
             <div>
-                <div class="stat-label">Total Sit-ins</div>
+                <div class="stat-label" style="color: blue;">Total Sit-ins</div>
                 <div class="stat-value" id="statTotalSitin">—</div>
             </div>
         </div>
         <div class="stat-card green">
             <div class="stat-icon icon-green"><i class="fa-solid fa-circle-dot"></i></div>
             <div>
-                <div class="stat-label">Active Now</div>
+                <div class="stat-label" style="color: blue;">Active Now</div>
                 <div class="stat-value" id="statActiveNow">—</div>
             </div>
         </div>
@@ -584,7 +584,7 @@
     <div class="charts-top">
         <div class="chart-card">
             <div class="chart-card-header">
-                <div class="chart-card-title"><i class="fa fa-bar-chart"></i> Sit-ins Over Time</div>
+               <div class="chart-card-title" style="color: blue;"><i class="fa fa-bar-chart"></i> Sit-ins Over Time</div>
                 <div class="toggle-group">
                     <button class="toggle-btn active" onclick="switchTime('daily',this)">Daily</button>
                     <button class="toggle-btn" onclick="switchTime('weekly',this)">Weekly</button>
@@ -596,14 +596,14 @@
 
         <div class="chart-card">
             <div class="chart-card-header">
-                <div class="chart-card-title"><i class="fa fa-pie-chart"></i> By Purpose</div>
+               <div class="chart-card-title" style="color: blue;"><i class="fa fa-pie-chart"></i> By Purpose</div>
             </div>
             <div class="chart-card-body"><canvas id="purposeChart"></canvas></div>
         </div>
 
         <div class="chart-card">
             <div class="chart-card-header">
-                <div class="chart-card-title"><i class="fa fa-building"></i> By Lab</div>
+                <div class="chart-card-title" style="color: blue;"><i class="fa fa-building"></i> By Lab</div>
             </div>
             <div class="chart-card-body"><canvas id="labChart"></canvas></div>
         </div>
@@ -613,7 +613,7 @@
     <div class="charts-bottom">
         <div class="chart-card">
             <div class="chart-card-header">
-                <div class="chart-card-title"><i class="fa fa-trophy"></i> Top Students</div>
+                <div class="chart-card-title" style="color: blue;"><i class="fa fa-trophy"></i> Top Students</div>
                 <button class="btn-export" onclick="exportCSV()"><i class="fa fa-download"></i> Export CSV</button>
             </div>
             <div class="chart-card-body" style="padding:0;">
@@ -623,7 +623,7 @@
 
         <div class="chart-card">
             <div class="chart-card-header">
-                <div class="chart-card-title"><i class="fa fa-graduation-cap"></i> By Course</div>
+                <div class="chart-card-title" style="color: blue;"><i class="fa fa-graduation-cap"></i> By Course</div>
             </div>
             <div class="chart-card-body" style="padding:0;">
                 <div id="courseContainer"><div class="chart-empty"><i class="fa fa-spinner fa-spin"></i> Loading...</div></div>

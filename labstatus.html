@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
@@ -419,7 +420,7 @@
         .theme-toggle-btn {
             display: flex;
             align-items: center;
-            background: rgba(255,255,255,0.12);
+           background: rgba(255,255,255,0.12);
             border: 1px solid rgba(255,255,255,0.22);
             color: white;
             padding: 3px;
@@ -446,16 +447,16 @@
 
 <!-- ── NAVBAR ── -->
 <nav class="navbar">
-    <div class="logo-text"><i class="fa fa-desktop"></i> Student Lab Status</div>
+         <div class="logo-text"><i class="fa fa-desktop"></i> Student Lab Status</div>
     <ul class="nav-links">
         <li class="notif-wrapper">
             <a href="#" onclick="toggleNotifDropdown(event)">
-                <i class="fa fa-bell"></i> Notifications
+               <i class="fa fa-bell"></i> Notifications
             </a>
             <span id="notifBadge" class="notif-badge"></span>
             <div id="notifDropdown" class="notif-dropdown">
                 <div class="notif-header">
-                    <i class="fa fa-bell"></i> Announcements
+                   <i class="fa fa-bell"></i> Announcements
                     <button onclick="markAllRead()" class="notif-mark-btn">Mark all read</button>
                 </div>
                 <div id="notifList" class="notif-list"></div>
@@ -484,9 +485,9 @@
     <!-- SECTION 1: LABORATORY STATUS -->
     <div class="section-panel">
         <div class="section-panel-header">
-            <i class="fa fa-desktop"></i> Laboratory Status
+            <i class="fa fa-desktop" style="color: blue;"></i> <span style="color: blue;">Laboratory Status</span>
             <span class="live-badge">
-                <span class="live-dot"></span> Live · updates every 30s
+                <span class="live-dot"></span> <span style="color: white;">Live · updates every 30s</span>
             </span>
         </div>
         <div class="section-panel-body">
@@ -503,7 +504,7 @@
     <!-- SECTION 2: AVAILABLE SOFTWARE -->
     <div class="section-panel">
         <div class="section-panel-header">
-            <i class="fa fa-box-open"></i> Available Software
+           <i class="fa fa-box-open" style="color: blue;"></i> <span style="color: blue;">Available Software</span>
         </div>
         <div class="section-panel-body">
             <div class="software-grid" id="softwareGrid">

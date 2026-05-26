@@ -523,7 +523,7 @@
 
 <!-- ── NAVBAR ── -->
 <nav class="navbar">
-    <div class="logo-text"><i class="fa-solid fa-user-shield"></i> College of Computer Studies Admin</div>
+    <div class="logo-text" style="color: blue;"><i class="fa-solid fa-user-shield"></i> College of Computer Studies Admin</div>
     <ul class="nav-links">
         <li><a href="admindashboard.html"><i class="fa fa-home"></i> Home</a></li>
         <li><a href="javascript:void(0)" onclick="openUnifiedModal()"><i class="fa fa-search"></i> Search</a></li>
@@ -602,31 +602,31 @@
 <!-- ── PAGE ── -->
 <div class="page-wrapper">
 
-    <div class="page-title"><i class="fa fa-star"></i> Add Reward & Points</div>
+   <div class="page-title" style="color: blue;"><i class="fa fa-star"></i> Add Reward & Points</div>
 
     <div class="rewards-grid">
 
         <!-- LEFT: Award Form -->
         <div class="rw-card">
             <div class="rw-card-header">
-                <div class="rw-card-header-left"><i class="fa fa-star"></i> Award Points to Student</div>
+                <div class="rw-card-header-left" style="color: blue;"><i class="fa fa-star"></i> Award Points to Student</div>
             </div>
             <div class="rw-card-body">
                 <div class="form-group">
-                    <label>Student ID Number</label>
+                    <label style="color: blue;">Student ID Number</label>
                     <input type="text" id="awardStudentId" placeholder="e.g. 20-1234-567">
                 </div>
                 <div class="form-group">
-                    <label>Points to Add</label>
+                   <label style="color: blue;">Points to Add</label>
                     <input type="number" id="awardPoints" value="10" min="1" max="100">
                 </div>
                 <div class="form-group">
-                    <label>Reason</label>
+                    <label style="color: blue;">Reason</label>
                     <textarea id="awardReason" placeholder="e.g. Perfect attendance"></textarea>
                 </div>
                 <div class="form-actions">
                     <button class="btn-award" onclick="awardPoints()">
-                        <i class="fa fa-star"></i> Award Points
+                    <i class="fa fa-star" style="color: black;"></i> <span style="color: black;">Award Points</span>
                     </button>
                 </div>
             </div>
@@ -635,8 +635,8 @@
         <!-- RIGHT: Leaderboard Table -->
         <div class="rw-card">
             <div class="rw-card-header">
-                <div class="rw-card-header-left"><i class="fa-solid fa-ranking-star"></i> Points Leaderboard</div>
-                <div class="lb-legend"><i class="fa fa-star"></i> Points = Completions + Duration + Bonus</div>
+                <div class="rw-card-header-left" style="color: blue;"><i class="fa-solid fa-ranking-star"></i> Points Leaderboard</div>
+                <div class="lb-legend"><i class="fa fa-star" style="color: yellow;"></i> Points = Completions + Duration + Bonus</div>
             </div>
             <div id="leaderboardContainer">
                 <div class="table-empty"><i class="fa fa-spinner fa-spin"></i> Loading...</div>

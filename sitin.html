@@ -608,7 +608,7 @@
 <body>
     <nav class="navbar">
         <div class="logo-text">
-            <i class="fa-solid fa-user-shield"></i> College of Computer Studies Admin
+           <i class="fa-solid fa-user-shield" style="color: blue;"></i> <span style="color: blue;">College of Computer Studies Admin</span>
         </div>
         <ul class="nav-links">
             <li><a href="admindashboard.html"><i class="fa fa-home"></i> Home</a></li>
@@ -685,7 +685,7 @@
 
             <div class="modal-footer" id="uniFooter" style="display:none;">
                 <button class="btn-cancel" onclick="closeModal('unifiedSitInModal')">Cancel</button>
-                <button class="btn-confirm" onclick="submitUnifiedSitIn()">Confirm Sit-In</button>
+                <button class="btn-confirm" onclick="submitUnifiedSitIn()" style="background-color: black; color: white;">Confirm Sit-In</button>
             </div>
         </div>
     </div>
@@ -694,23 +694,23 @@
     <div id="sitInModal" class="modal-overlay">
         <div class="modal-content" style="width: 480px;">
             <div class="modal-header">
-                <h3><i class="fa fa-laptop"></i> New Sit-In</h3>
+                <h3 style="color: blue;"><i class="fa fa-laptop"></i> New Sit-In</h3>
                 <button onclick="closeModal('sitInModal')" style="background:none;border:none;color:white;cursor:pointer;font-size:20px;">&times;</button>
             </div>
             <div style="padding: 20px; display:flex; flex-direction:column; gap:14px;">
                 <div>
-                    <label class="sitin-label">Student ID Number</label>
+                    <label class="sitin-label" style="color: blue;">Student ID Number</label>
                     <input type="text" id="genIdNumber" placeholder="Enter Student ID..."
                         class="sitin-input" oninput="autoFillStudent()">
                 </div>
                 <div>
-                    <label class="sitin-label">Full Name</label>
+                    <label class="sitin-label" style="color: blue;">Full Name</label>
                     <input type="text" id="genFullName" placeholder="Auto-filled from ID..."
                         class="sitin-input" readonly>
                 </div>
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
                     <div>
-                        <label class="sitin-label">Purpose</label>
+                       <label class="sitin-label" style="color: blue;">Purpose</label>
                         <select id="genPurpose" class="modern-select" style="margin-top:5px;">
                             <option>C Programming</option>
                             <option>Java Projects</option>
@@ -719,32 +719,32 @@
                         </select>
                     </div>
                     <div>
-                        <label class="sitin-label">Lab Room</label>
+                        <label class="sitin-label" style="color: blue;">Lab Room</label>
                         <select id="genLab" class="modern-select" style="margin-top:5px;">
                             <option>Lab 524</option>
                             <option>Lab 525</option>
                             <option>Lab 526</option>
-                            <option>Lab 527</option>
+                            <option>Lab 527</option>    
                             <option>Lab 528</option>
                         </select>
                     </div>
                 </div>
                 <div>
-                    <label class="sitin-label">Remaining Sessions</label>
+                    <label class="sitin-label" style="color: blue;">Remaining Sessions</label>
                     <input type="text" id="genRemaining" class="sitin-input" readonly
                         placeholder="Auto-filled from ID...">
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn-cancel" onclick="closeModal('sitInModal')"><i class="fa-solid fa-xmark"></i> Cancel</button>
-                <button class="btn-confirm" onclick="submitSitIn()"><i class="fa fa-check"></i> Confirm Sit-In</button>
+                <button class="btn-cancel" onclick="closeModal('sitInModal')" style="background-color: red; color: white;"><i class="fa-solid fa-xmark"></i> Cancel</button>
+                <button class="btn-confirm" onclick="submitSitIn()" style="background-color: black; color: white;"><i class="fa fa-check"></i> Confirm Sit-In</button>
             </div>
         </div>
     </div>
 
     <div class="page-wrapper">
 
-        <div class="page-title"><i class="fa fa-laptop"></i> Current Sit-in</div>
+        <div class="page-title" style="color: blue;"><i class="fa fa-laptop"></i> Current Sit-in</div>
 
         <div class="table-card">
 
@@ -760,8 +760,7 @@
                         Entries per page
                     </div>
                     <button class="btn-add-sitin" onclick="openSitInModal()">
-                        <i class="fa fa-plus"></i> New Sit-In
-                    </button>
+                           <i class="fa fa-plus"></i> New Sit-In
                 </div>
                 <div class="search-control">
                     <input type="text" id="searchInput" placeholder="Search by Name or ID..." oninput="applySearch()">
@@ -798,7 +797,7 @@
     DARK / LIGHT MODE
     ══════════════════════════════════════ */
     function applyTheme(theme) {
-        document.documentElement.setAttribute('data-theme', theme);
+        document.documentElement.setAttribute('data-theme', theme); 
         const icon  = document.getElementById('themeIcon');
         const label = document.getElementById('themeLabel');
         if (theme === 'dark') {

@@ -265,7 +265,7 @@
 </head>
 <body>
     <nav class="navbar">
-        <div class="logo-text"><i class="fa fa-calendar"></i> Student Reservation</div>
+       <div class="logo-text" style="color: blue;"><i class="fa fa-calendar"></i> Student Reservation</div>
         <ul class="nav-links">
             <li class="notif-wrapper">
                 <a href="#" onclick="toggleNotifDropdown(event)">
@@ -299,20 +299,20 @@
 
     <div class="reservation-container">
         <div class="reservation-card">
-            <div class="card-header"><i class="fa-solid fa-calendar-check"></i> <span>Reservation</span></div>
+            <div class="card-header" style="color: blue;"><i class="fa-solid fa-calendar-check"></i> <span>Reservation</span></div>
 
             <div id="reservationForm">
                 <div class="input-group">
-                    <label style="font-size: 15px;"><i class="fa-solid fa-id-card"></i> ID Number:</label>
+                   <label style="font-size: 15px; color: blue;"><i class="fa-solid fa-id-card"></i> ID Number:</label>
                     <input type="text" id="res-id" placeholder="Your ID Number" readonly>
                 </div>
                 <div class="input-group">
-                    <label style="font-size: 15px;"><i class="fa-solid fa-user"></i> Student Name:</label>
+                    <label style="font-size: 15px; color: blue;"><i class="fa-solid fa-user"></i> Student Name:</label>
                     <input type="text" id="res-name" placeholder="Student Name" readonly>
                 </div>
                 
                 <div class="input-group" style="margin-top: 40px;">
-                    <label style="font-size: 15px;"><i class="fa-solid fa-bullseye"></i> Purpose:</label>
+                   <label style="font-size: 15px; color: blue;"><i class="fa-solid fa-bullseye"></i> Purpose:</label>
                     <select id="res-purpose">
                         <option value="C Programming">C Programming</option>
                         <option value="Java Projects">Java Projects</option>
@@ -322,7 +322,7 @@
                 </div>
 
                 <div class="input-group">
-                    <label style="font-size: 15px;"><i class="fa-solid fa-computer"></i> Laboratory:</label>
+                   <label style="font-size: 15px; color: blue;"><i class="fa-solid fa-computer"></i> Laboratory:</label>
                     <select id="res-lab" onchange="generatePCGrid()">
                         <option value="Lab 524">Lab 524</option>
                         <option value="Lab 525">Lab 525</option>
@@ -336,7 +336,7 @@
                 <div id="pc-selection-container" style="margin-top: 20px; border-top: 1px solid #ddd; padding-top: 20px;">
                     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
                         <label style="font-size: 15px; font-weight: bold; margin: 0;">
-                            <i class="fa-solid fa-desktop"></i> Select Workstation:
+                            <i class="fa-solid fa-desktop" style="color: blue;"></i> <span style="color: blue;">Select Workstation:</span>
                         </label>
                         <button type="button" onclick="generatePCGrid()" 
                             style="background: none; border: 1px solid #aaa; border-radius: 5px; padding: 3px 10px; font-size: 12px; cursor: pointer; color: #666;">
@@ -361,20 +361,21 @@
                 </div>
                 
                 <div class="input-group mt-20" style="margin-top: 40px;">
-                    <label style="font-size: 15px;"><i class="fa-solid fa-clock"></i> Time In:</label>
+                    <label style="font-size: 15px; color: blue;"><i class="fa-solid fa-clock"></i> Time In:</label>
                     <input type="time" id="res-time">
                 </div>
                 <div class="input-group">
-                    <label style="font-size: 15px;"><i class="fa-solid fa-calendar-days"></i> Date:</label>
+                    <label style="font-size: 15px; color: blue;"><i class="fa-solid fa-calendar-days"></i> Date:</label>
                     <input type="date" id="res-date">
                 </div>
                 <div class="input-group">
-                    <label style="font-size: 15px;"><i class="fa-solid fa-hourglass-half"></i> Remaining Session:</label>
+                    <label style="font-size: 15px; color: blue;"><i class="fa-solid fa-hourglass-half"></i> Remaining Session:</label>
                     <input type="text" id="res-sessions" readonly>
                 </div>
 
-                <button type="button" id="finalReserveBtn" class="reserve-button" onclick="handleReservation(event)">
-                    <i class="fa-solid fa-paper-plane"></i> Reserve
+                 <button type="button" id="finalReserveBtn" class="reserve-button" onclick="handleReservation(event)">
+                    <i class="fa-solid fa-paper-plane" style="color: #000000;"></i> <span style="color: #000000;">Reserve</span>
+
                 </button>
             </div>
         </div>

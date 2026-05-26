@@ -671,7 +671,7 @@
 </head>
 <body>
     <nav class="navbar">
-        <div class="logo-text"><i class="fa-solid fa-user-shield"></i> College of Computer Studies Admin</div>
+       <div class="logo-text" style="color: blue;"><i class="fa-solid fa-user-shield"></i> College of Computer Studies Admin</div>
         <ul class="nav-links">
             <li><a href="admindashboard.html"><i class="fa fa-home"></i> Home</a></li>
             <li><a href="javascript:void(0)" onclick="openUnifiedModal()"><i class="fa fa-search"></i> Search</a></li>
@@ -685,7 +685,6 @@
             <li><a href="analytics.html"><i class="fa fa-line-chart"></i> Analytics</a></li>
             <li><a href="reward.html"><i class="fa fa-gift"></i> Reward</a></li>
             <li><a href="software.html"><i class="fa fa-upload"></i> Software</a></li>
-            <li>
                 <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()">
                     <i class="fa-solid fa-moon" id="themeIcon"></i>
                     <span id="themeLabel"></span>
@@ -758,7 +757,7 @@
 
     <div class="page-wrapper">
 
-        <div class="page-title"><i class="fa fa-comment-dots"></i> Feedback Reports</div>
+        <div class="page-title" style="color: blue;"><i class="fa fa-comment-dots"></i> Feedback Reports</div>
 
         <div class="table-card">
 
@@ -771,9 +770,8 @@
             
             <div class="controls">
                 <button class="btn-print" onclick="window.print()"><i class="fa fa-print"></i> Print PDF</button>
-                <div><input type="text" id="feedbackSearch" placeholder="Search by Name or ID..." onkeyup="filterFeedback()"></div>
+               <div><input type="text" id="feedbackSearch" placeholder="Search by Name or ID..." onkeyup="filterFeedback()"></div>
             </div>
-
             <table id="feedbackTable">
                 <thead>
                     <tr>
